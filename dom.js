@@ -46,6 +46,6 @@
   };
   var instance = new Mark(context, options);
   instance.markRegExp(/Karazan/gmi);
-  console.log(instance.markRanges.length);
+  console.log(instance.length);
   
 })();
