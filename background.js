@@ -47,19 +47,3 @@ chrome.runtime.onMessage.addListener((message) => {
   }
 })
 
-/*
-
-// text highlighter plugin.
-https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.es6.min.js
-
-var headings = document.evaluate("/html/body//h2", document, null, XPathResult.ANY_TYPE, null); 
-
-var thisHeading = headings.iterateNext(); 
-var alertText = "Level 2 headings in this document are:\n";
-while (thisHeading) {
-  thisHeading.style.backgroundColor = "red";
-  thisHeading = headings.iterateNext();
-}
-console.log(alertText); // Alerts the text of all h2 elements
-
-*/
