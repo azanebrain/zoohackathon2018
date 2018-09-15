@@ -4,20 +4,28 @@
 
 'use strict';
 
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.storage.sync.set({color: '#3aa757'}, function() {
-    console.log("The color is green.");
-  });
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    chrome.declarativeContent.onPageChanged.addRules([{
-      conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: {urlMatches: '(google|chrome|amazon|twitter)\.com'},
-      })
-      ],
-          actions: [new chrome.declarativeContent.ShowPageAction()]
-    }]);
-  });
+
+// listen for our browerAction to be clicked
+chrome.browserAction.onClicked.addListener(function (tab) {
+	// for the current tab, inject the "inject.js" file & execute it
+	chrome.tabs.executeScript(tab.ib, {
+		file: 'dom.js'
+	});
 });
 
+/*
 
+// text highlighter plugin.
+https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.es6.min.js
 
+var headings = document.evaluate("/html/body//h2", document, null, XPathResult.ANY_TYPE, null); 
+
+var thisHeading = headings.iterateNext(); 
+var alertText = "Level 2 headings in this document are:\n";
+while (thisHeading) {
+  thisHeading.style.backgroundColor = "red";
+  thisHeading = headings.iterateNext();
+}
+console.log(alertText); // Alerts the text of all h2 elements
+
+*/
