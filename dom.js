@@ -8,14 +8,34 @@
 
   var myImage = document.querySelector('img');
 
-  fetch('http://2018zoohackathon.ajzane.com/wp-json/wp/v2/posts/', {
-        method: 'get'
-    })
-    .then(response => response.json())
-    .then(jsonData => console.log(jsonData))
-    .catch(err => {
-            console.log(err);
-          });
+  let posts = {};
+  let categories = {};
+
+  fetch('https://2018zoohackathon.ajzane.com/wp-json/wp/v2/categories/', {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+  })
+  .then((response) => { response.json() })
+  .then((jsonData) => { categories = jsonData; } )
+  .catch(err => {
+    console.log(err);
+  });
+
+
+  fetch('https://2018zoohackathon.ajzane.com/wp-json/wp/v2/posts/', {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then((response) => { response.json() })
+  .then((jsonData) => { posts = jsonData; } )
+  .catch(err => {
+    console.log(err);
+  });
+
 
 
   var context = document.querySelector("body"); // requires an element with class "context" to exist
