@@ -37,6 +37,9 @@
   });
 
 
+  chrome.runtime.sendMessage(null, {
+    count: 42
+  })
 
   var context = document.querySelector("body"); // requires an element with class "context" to exist
   var options = {
