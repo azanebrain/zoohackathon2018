@@ -4,14 +4,6 @@
 
 'use strict';
 
-// listen for our browerAction to be clicked
-chrome.browserAction.onClicked.addListener(function (tab) {
-	// for the current tab, inject the "inject.js" file & execute it
-	chrome.tabs.executeScript(tab.ib, {
-		file: 'dom.js'
-	});
-});
-
 /**
  * Adds a number to the badge
  *
@@ -42,6 +34,18 @@ function setBadgeToGoodColor() {
 function setBadgeToMediumColor() {
   chrome.browserAction.setBadgeBackgroundColor({ color: [0, 0, 255, 128] });
 }
+
+/**
+ * Listen for messages from the DOM
+ */
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.count) {
+    setBadgeCount(message.count)
+  }
+  if (message.color) {
+    console.log('set a color')
+  }
+})
 
 /*
 

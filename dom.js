@@ -1,10 +1,4 @@
 (function() {
-  const redAlert = [
-    'plastic straws',
-    'Brandon',
-  ];
-
-  // http://2018zoohackathon.ajzane.com/wp-json/wp/v2/posts/
 
   var myImage = document.querySelector('img');
 
@@ -54,4 +48,8 @@
     console.log(err);
   });
   
+  chrome.runtime.sendMessage(null, {
+    count: 42
+  });
+
 })();
