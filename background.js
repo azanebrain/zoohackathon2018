@@ -35,6 +35,18 @@ function setBadgeToMediumColor() {
   chrome.browserAction.setBadgeBackgroundColor({ color: [0, 0, 255, 128] });
 }
 
+/**
+ * Listen for messages from the DOM
+ */
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.count) {
+    setBadgeCount(message.count)
+  }
+  if (message.color) {
+    console.log('set a color')
+  }
+})
+
 /*
 
 // text highlighter plugin.
