@@ -9,8 +9,8 @@
   },
   "content_scripts": [
     { "run_at" :"document_end",
-    "matches": ["https://twitter.com/*"],
-    "js": ["dom.js"] }
+    "matches": ["https://www.amazon.com/*"],
+    "js": ["mark.es6.min.js", "dom.js"] }
     ],
   "options_page": "options.html",
   "browser_action": {
