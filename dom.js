@@ -47,9 +47,10 @@
   .catch(err => {
     console.log(err);
   });
-  
+
   chrome.runtime.sendMessage(null, {
-    count: 42
+    count: 42,
+    posts: [42, 1337]
   });
 
 })();

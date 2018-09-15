@@ -37,13 +37,28 @@ function setBadgeToMediumColor() {
 
 /**
  * Listen for messages from the DOM
+ * 
+ * @param {Badge Message} message Updates the icon badge. Contains a count, a color, or both
+ * @param {Post Message} message Contains the Post IDs that should be 
  */
 chrome.runtime.onMessage.addListener((message) => {
+  console.log('A message: ' , message)
+  // Badge Message:
   if (message.count) {
     setBadgeCount(message.count)
   }
   if (message.color) {
     console.log('set a color')
+  }
+
+  // Post Message:
+  if (message.posts) {
+    console.log('the message has posts')
+    chrome.storage.sync.set('posts', function (data) {
+      console.log('data: ', data)
+      // changeColor.style.backgroundColor = data.color;
+      // changeColor.setAttribute('value', data.color);
+    });
   }
 })
 
