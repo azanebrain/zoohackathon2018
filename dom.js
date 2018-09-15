@@ -17,8 +17,26 @@
         'Content-Type': 'application/json'
       }
   })
-  .then((response) => { response.json() })
-  .then((jsonData) => { categories = jsonData; } )
+  .then((response) => { return response.json() })
+  .then((jsonData) => {
+    
+    var context = document.querySelector("body"); // expensive.
+
+    const categoryNames = jsonData.filter(category => category.name != "Uncategorized")
+    .map((item) => { return item.name; }).forEach((item) => { console.log(item);
+        var options = {
+          end: function(count) {
+            console.log(count);
+          },
+          ignoreJoiners: true,
+          accuracy: 'exactly',
+          separateWordSearch: false
+        };
+        var instance = new Mark(context, options);
+        instance.mark(item);
+      });
+    return categories = jsonData;
+  })
   .catch(err => {
     console.log(err);
   });
@@ -35,17 +53,5 @@
   .catch(err => {
     console.log(err);
   });
-
-
-
-  var context = document.querySelector("body"); // requires an element with class "context" to exist
-  var options = {
-    end: function(count) {
-      console.log(count);
-    }
-  };
-  var instance = new Mark(context, options);
-  instance.markRegExp(/Karazan/gmi);
-  console.log(instance.length);
   
 })();
