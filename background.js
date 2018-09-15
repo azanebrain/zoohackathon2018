@@ -4,7 +4,6 @@
 
 'use strict';
 
-
 // listen for our browerAction to be clicked
 chrome.browserAction.onClicked.addListener(function (tab) {
 	// for the current tab, inject the "inject.js" file & execute it
@@ -12,6 +11,37 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 		file: 'dom.js'
 	});
 });
+
+/**
+ * Adds a number to the badge
+ *
+ * @param {number} count The number to set in the badge
+ */
+function setBadgeCount(count) {
+  chrome.browserAction.setBadgeText({
+    text: count.toString()
+  });
+}
+
+/**
+ * Clears the count from the badge
+ */
+function clearBadgeCount() {
+  // set text to '' to remove the badge
+  chrome.browserAction.setBadgeText({ text: '' });
+}
+
+function setBadgeToBadColor() {
+  chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 128] });
+}
+
+function setBadgeToGoodColor() {
+  chrome.browserAction.setBadgeBackgroundColor({ color: [0, 255, 0, 128] });
+}
+
+function setBadgeToMediumColor() {
+  chrome.browserAction.setBadgeBackgroundColor({ color: [0, 0, 255, 128] });
+}
 
 /*
 
