@@ -1,0 +1,9 @@
+{
+  "entries": [
+    {
+      "id": 1,
+      "url": "https://twitter.com/drrobotnik",
+      "xpath": "//*[@id='stream-item-tweet-875496818192171008']/div[1]/div[2]/div[2]/p"
+    }
+  ]
+}
