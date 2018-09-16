@@ -1,14 +1,46 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <link href="https://fonts.googleapis.com/css?family=Lato:300,400|Raleway:400,600" rel="stylesheet">
     <style>
       body {
+        font-family: 'Lato', sans-serif;
+        font-weight: 300;
         width: 20rem;
+        margin:0;
+        font-color: #666666;
+      }
+
+      .post-title {
+        font-family: 'Raleway', sans-serif;
+        font-weight: 600;
+      }
+
+      .link-more {display: none;}
+
+      .post-image {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        vertical-align: middle;
+        line-height: 1;
+        background-position: center center;
+        background-size: contain;
+        background-color: #e7e7e8;
+        border-radius: 50%;
+        margin-right: 16px;
+      }
+
+      .container {
+        padding: 16px;
       }
 
       /* Style the buttons that are used to open and close the accordion panel */
       .accordion {
-          background-color: #eee;
+          background-color: #fff;
+          font-family: 'Raleway', sans-serif;
+          font-weight: 600;
+          font-size: 14px;
           color: #444;
           cursor: pointer;
           padding: 18px;
@@ -16,12 +48,18 @@
           text-align: left;
           border: none;
           outline: none;
-          transition: 0.4s;
+          transition: 0.2s;
+          position:relative;
+      }
+
+      .post-learnmore {
+        color: #00878b;
+        font-weight: 400;
       }
 
       /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-      .active, .accordion:hover {
-          background-color: #ccc;
+      .post.active .accordion, .accordion:hover {
+          background-color: #e7e7e8;
       }
 
       /* Style the accordion panel. Note: collapsed by default */
@@ -30,8 +68,13 @@
         display: block;
         max-height: 0;
         overflow: hidden;
-        padding: 0 18px;
-        transition: max-height 0.7s linear;
+        padding: 0;
+        transition: max-height 0.25s linear;
+      }
+
+      .panel-container {
+        padding: 0 16px 16px 84px;
+        font-size: 14px;
       }
 
       /* Expanded state */
@@ -39,16 +82,23 @@
         max-height: 500px;
       }
 
-      .accordion:after {
-        content: '\02795'; /* Unicode character for "plus" sign (+) */
-        font-size: 13px;
+      .post .accordion:after {
+        font-family: 'Lato', sans-serif;
+        font-weight: 300;
+        content: '+';
+        font-size: 27px;
         color: #777;
         float: right;
         margin-left: 5px;
-    }
+        top: 50%;
+        transform: translateY(-50%);
+        position: absolute;
+        right: 24px;
+      }
 
-    .active:after {
-        content: "\2796"; /* Unicode character for "minus" sign (-) */
+    .post.active .accordion:after {
+        content: "-";
+        font-size: 42px;
     }
 
     .hidden {
@@ -58,11 +108,13 @@
 
   </head>
   <body>
-    <p>Palm Dot Com</p>
-    <div>
-      <p>Toggle Highlights:</p>
-      <input type="radio" name="highlights" value="on" checked="checked"> On
-      <input type="radio" name="highlights" value="off"> Off
+    <div class="container">
+      <p>Palm Dot Com</p>
+      <div>
+        <p>Toggle Highlights:</p>
+        <input type="radio" name="highlights" value="on" checked="checked"> On
+        <input type="radio" name="highlights" value="off"> Off
+      </div>
     </div>
 
     <div id="posts">

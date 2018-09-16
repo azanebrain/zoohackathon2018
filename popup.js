@@ -20,12 +20,12 @@ async function loadPosts() {
       newPost.className = `post hidden`
       newPost.id = `post-${post.id}`
       newPost.innerHTML = `
-        <button class="accordion">${post.title.rendered}</button>
+        <button class="accordion"><span style="background-image:url(http://lorempixel.com/250/200);" class="post-image"></span>${post.title.rendered}</button>
         <div class="panel">
-          <h3 class="post-title"><a href="${post.link}" target="_blank">${post.title.rendered}</a></h3>
-          <img src="http://lorempixel.com/250/200" class="post-image" />
-          <p>${post.excerpt.rendered}</p>
-          <p><a href="${post.link}" target="_blank" class="post-learnmore">Learn More</a></p>
+          <div class="panel-container">
+            <p>${post.excerpt.rendered}</p>
+            <p><a href="${post.link}" target="_blank" class="post-learnmore">Learn More</a></p>
+          </div>
         </div>
       `
       postsBlock.appendChild(newPost);
