@@ -43,11 +43,18 @@ async function loadPosts() {
   })
 }
 
+function setHighlightState() {
+  console.log('#######')
+  console.log('need to set highlight state on init')
+  console.log('#######')
+}
+
 /**
  * Initialize this view
  */
 async function init() {
   await loadPosts();
+  setHighlightState(); 
 
   var acc = document.getElementsByClassName("accordion");
   console.log(acc);
@@ -75,3 +82,71 @@ async function init() {
 }
 
 init();
+
+// // Toggle highlights
+// var highlightToggle = document.getElementsByName('highlights')
+
+// highlightToggle.addEventListener('Click', (event) => {
+//   // chrome.runtime.sendMessage(null, {
+//   //   showHighlights: false
+//   // });
+// })
+
+function toggleHighlight(show) {
+  console.log('toggleHighlight: ', show)
+}
+
+// Enable Highlighting
+document.getElementsByName("highlights")[0].addEventListener("click", function () {
+  console.log('a 0 click!')
+  toggleHighlight(true)
+});
+
+// Disable Highlighting
+document.getElementsByName("highlights")[1].addEventListener("click", function () {
+  console.log('a 1 click!')
+  toggleHighlight(false)
+});
+
+/**
+ * Toggles whether the DOM should show highlights
+ * 
+ * Emits a message to the DOM
+ * @param {boolean} showHighlights: TRUE when the DOM should show highlights
+ */
+function toggleHighlight(showHighlights) {
+  console.log('toggling highlight to: ' , showHighlights)
+
+
+  // chrome.storage.sync.set({ isHighlighting: message.showHighlights });
+  // Directly execute on DOM
+  function modifyDOM(showHighlights) {
+    //You can play with your DOM here or check URL against your regex
+    console.log('Tab script:');
+
+    console.log('before isHighlighting: ', isHighlighting);
+    isHighlighting = showHighlights;
+    console.log('after isHighlighting: ', isHighlighting);
+    return document.body.innerHTML;
+  }
+  //We have permission to access the activeTab, so we can call chrome.tabs.executeScript:
+  chrome.tabs.executeScript({
+    code: `(${modifyDOM})(${showHighlights});`,
+    foo: 'bar'
+  });
+
+  // Tell Background to tell DOM
+  // chrome.runtime.sendMessage(null, {
+  //   showHighlights: showHighlights
+  // });
+
+  // To communicate directly with the DOM:
+  chrome.tabs.query(
+    { currentWindow: true, active: true },
+    function (tabArray) {
+      chrome.tabs.sendMessage(tabArray[0].id, {
+        showHighlights: showHighlights
+      });
+    }
+  );
+}

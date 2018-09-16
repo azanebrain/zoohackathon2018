@@ -8,7 +8,27 @@ var headers = {
   }
 };
 
-(function() {
+// Whether highlights should be added to the screen
+// This value is set by Background so that it persists between page transitions
+var isHighlighting;
+
+console.log('hello DOM: ', isHighlighting);
+
+chrome.runtime.sendMessage(null, {
+  getHighlightingValue: ''
+}, null, (value) => {
+  console.log('=======')
+  console.log('callback value: ' , value)
+  console.log('=======')
+});
+
+var port = chrome.runtime.connect({name: 'knockknock'});
+
+(function () {
+  port.postMessage({ joke: 'heyo' });
+  port.onMessage.addListener((msg) => {
+    console.log('knock knock msg: ', msg)
+  });
   // A list of Category IDs that have been found on this page
   let categories = [];
   // The total number of words found on the page
@@ -43,6 +63,16 @@ var headers = {
           "separateWordSearch": false
         };
         var instance = new Mark(context);
+
+        console.log('~am I highlighting? ', isHighlighting)
+        // If this is the first run, start highlighting
+        // if (isHighlighting === undefined) {
+        //   isHighlighting = true
+        // If the user has chosen to not highlight the page, exit
+        // }
+        if (!isHighlighting) {
+          return
+        }
         instance.mark(category.name, options);
       });
       
@@ -75,3 +105,21 @@ var headers = {
     console.log(err);
   });
 })();
+
+
+
+// chrome.runtime.onStartup.addListener((startup) => {
+//   console.log('hello DOM - startup: ' , startup)
+//   console.log('isHighlighting: ' , isHighlighting)
+//   console.log('chrome storage: ', chrome.storage.sync.get('isHighlighting') )
+// })
+
+// Toggle highlights
+// chrome.runtime.onMessage.addListener((message) => {
+//   console.log('DOM message: ' , message)
+
+//   // Toggle highlights
+//   if (message.hasOwnProperty('showHighlights')) {
+//     isHighlighting = message.showHighlights
+//   }
+// })

@@ -4,6 +4,11 @@
 
 'use strict';
 
+
+console.log('hello BG');
+
+chrome.storage.sync.set({ isHighlighting: true });
+
 /**
  * Adds a number to the badge
  *
@@ -90,5 +95,25 @@ chrome.runtime.onMessage.addListener((message) => {
     console.log('the message has posts: ', message.posts)
     chrome.storage.sync.set({posts: message.posts});
   }
+
+  // Toggle highlights
+  if (message.hasOwnProperty('showHighlights')) {
+    console.log('setting highlight sync value to ' ,message.showHighlights)
+    // isHighlighting = message.showHighlights
+    chrome.storage.sync.set({ isHighlighting: message.showHighlights });
+  }
+  
+  if (message.hasOwnProperty('getHighlightingValue')) {
+    console.log('got a message for the highlight val')
+    return ({
+      blearg: 'HEYO!!!'
+    });
+  }
 })
 
+chrome.runtime.onConnect.addListener((port) => {
+  port.postMessage({gaah: 'fsdjdaafsd'})
+  port.onMessagae.addListener((msg) => {
+    console.log('background listener: ', msg)
+  })
+})
