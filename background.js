@@ -35,13 +35,11 @@ function setBadgeToMediumColor() {
   chrome.browserAction.setBadgeBackgroundColor({ color: [0, 0, 255, 128] });
 }
 
-var cat = chrome.storage.local.get(['conconPosts'], function(result) {
-  if(result) {
-    console.log("we've got all the dataz we need.");
-    return result;
-  }else{
+var cat = chrome.storage.local.get(['conconPosts'], async function(results) {
 
-    fetch('https://2018zoohackathon.ajzane.com/wp-json/wp/v2/posts/', {
+  if(Object.keys(results).length === 0) {
+
+    var results = await fetch('https://2018zoohackathon.ajzane.com/wp-json/wp/v2/posts/', {
       method: 'get',
       headers: {
         'Content-Type': 'application/json'
@@ -56,11 +54,9 @@ var cat = chrome.storage.local.get(['conconPosts'], function(result) {
       console.log(err);
     });
   }
+  console.log('spoof', results);
+  return results;
 });
-console.log(cat);
-if(cat) {
-  localStorage.setItem("username", "John");
-}
 
 // look at localstorage see if posts exist, if not hit the endpoint and set to local storage.
 
