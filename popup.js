@@ -30,7 +30,7 @@ async function loadPosts() {
       `
       postsBlock.appendChild(newPost);
 
-      newPost.onclick = function() { // this needs to be applied to the accordion button, not the `newPost` element.
+      newPost.onclick = function() {
         this.classList.toggle("active");
         var panel = this.nextElementSibling;
         if (panel.style.maxHeight) {

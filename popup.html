@@ -3,8 +3,9 @@
   <head>
     <style>
       body {
-        width: 15rem;
+        width: 20rem;
       }
+
       /* Style the buttons that are used to open and close the accordion panel */
       .accordion {
           background-color: #eee;
@@ -23,13 +24,21 @@
           background-color: #ccc;
       }
 
-      /* Style the accordion panel. Note: hidden by default */
+      /* Style the accordion panel. Note: collapsed by default */
       .panel {
-          padding: 0 18px;
-          background-color: white;
-          display: none;
-          overflow: hidden;
+        background-color: white;
+        display: block;
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 18px;
+        transition: max-height 0.7s linear;
       }
+
+      /* Expanded state */
+      .post.active .panel {
+        max-height: 500px;
+      }
+
       .accordion:after {
         content: '\02795'; /* Unicode character for "plus" sign (+) */
         font-size: 13px;
@@ -40,13 +49,6 @@
 
     .active:after {
         content: "\2796"; /* Unicode character for "minus" sign (-) */
-    }
-    .panel {
-      padding: 0 18px;
-      background-color: white;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.2s ease-out;
     }
 
     .hidden {
