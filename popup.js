@@ -16,7 +16,9 @@ async function loadPosts() {
     posts.conconPosts.forEach(post => {
       // console.log('adding post: ' , post)
       var newPost = document.createElement('div')
-      newPost.className = `post-${post.id}`
+      // All posts start off hidden
+      newPost.className = `post hidden`
+      newPost.id = `post-${post.id}`
       newPost.innerHTML = `
         <button class="accordion">${post.title.rendered}</button>
         <div class="panel">
@@ -41,36 +43,35 @@ async function loadPosts() {
   })
 }
 
+/**
+ * Initialize this view
+ */
 async function init() {
-await loadPosts();
+  await loadPosts();
 
-var acc = document.getElementsByClassName("accordion");
-console.log(acc);
-  var i;
-  
-  for (i = 0; i < acc.length; i++) {
-    acc[i].addEventListener("click", function() { console.log('foo');
-      this.classList.toggle("active");
-      var panel = this.nextElementSibling;
-      if (panel.style.maxHeight) {
-        panel.style.maxHeight = null;
-      } else {
-        panel.style.maxHeight = panel.scrollHeight + "px";
-      } 
+  var acc = document.getElementsByClassName("accordion");
+  console.log(acc);
+    var i;
+    
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() { console.log('foo');
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        } 
+      });
+    }
+
+  // Show the posts which should be shown
+  chrome.storage.sync.get('posts', function(data) {
+    console.log('data: ' , data)
+    data.posts.forEach(postId => {
+      document.getElementById(`post-${postId}`).classList.remove('hidden')
     });
-  }
-
-chrome.storage.sync.get('posts', function(data) {
-  console.log('data: ' , data)
-  // for each data
-  // that post with the id: add .show
-  // if not: add .hide
-
-
-  // changeColor.style.backgroundColor = data.color;
-  // changeColor.setAttribute('value', data.color);
-});
-
+  });
 }
 
 init();
