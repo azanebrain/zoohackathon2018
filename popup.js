@@ -4,19 +4,32 @@
 
 'use strict';
 
-// grab post content from local storage
-// apply to Popup's DOM
-
 /**
- * Listen for messages from the DOM
- * 
- * @param message A Posts Message object that contains ...?
+ * Grab post content from storage (set by Background)
+ * Apply to Popup's DOM
  */
-chrome.runtime.onMessage.addListener((message) => {
-  console.log('message: ' , message)
+async function loadPosts() {
+  chrome.storage.local.get(['conconPosts'], (posts) => {
+    // console.log('posts: ' , posts)
+    var postsBlock = document.getElementById('posts')
 
-  // Set the posts to the popup
-})
+    posts.conconPosts.forEach(post => {
+      // console.log('adding post: ' , post)
+      var newPost = document.createElement('div')
+      newPost.className = `post-${post.id}`
+      newPost.innerHTML = `
+        Title: ${post.title.rendered}
+        Link: ${post.link}
+        <div class="inner">
+        ${post.excerpt.rendered}
+        </div>
+      `
+      postsBlock.appendChild(newPost)
+    });
+  })
+}
+
+loadPosts()
 
 chrome.storage.sync.get('posts', function(data) {
   console.log('data: ' , data)
