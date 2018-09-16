@@ -18,18 +18,47 @@ async function loadPosts() {
       var newPost = document.createElement('div')
       newPost.className = `post-${post.id}`
       newPost.innerHTML = `
-        Title: ${post.title.rendered}
-        Link: ${post.link}
-        <div class="inner">
-        ${post.excerpt.rendered}
+        <button class="accordion">${post.title.rendered}</button>
+        <div class="panel">
+          <h3 class="post-title"><a href="${post.link}" target="_blank">${post.title.rendered}</a></h3>
+          <img src="http://lorempixel.com/250/200" class="post-image" />
+          <p>${post.excerpt.rendered}</p>
+          <p><a href="${post.link}" target="_blank" class="post-learnmore">Learn More</a></p>
         </div>
       `
-      postsBlock.appendChild(newPost)
+      postsBlock.appendChild(newPost);
+
+      newPost.onclick = function() { // this needs to be applied to the accordion button, not the `newPost` element.
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        } 
+      };
     });
   })
 }
 
-loadPosts()
+async function init() {
+await loadPosts();
+
+var acc = document.getElementsByClassName("accordion");
+console.log(acc);
+  var i;
+  
+  for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() { console.log('foo');
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.maxHeight) {
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      } 
+    });
+  }
 
 chrome.storage.sync.get('posts', function(data) {
   console.log('data: ' , data)
@@ -41,3 +70,7 @@ chrome.storage.sync.get('posts', function(data) {
   // changeColor.style.backgroundColor = data.color;
   // changeColor.setAttribute('value', data.color);
 });
+
+}
+
+init();
