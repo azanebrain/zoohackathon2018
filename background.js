@@ -54,7 +54,6 @@ var cat = chrome.storage.local.get(['conconPosts'], async function(results) {
       console.log(err);
     });
   }
-  console.log('spoof', results);
   return results;
 });
 
