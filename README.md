@@ -11,3 +11,6 @@ Palm dot com?
 # Debugging
 
 From the Extensions page, click the "inspect views background page"
+
+# Libraries
+* https://markjs.io/
