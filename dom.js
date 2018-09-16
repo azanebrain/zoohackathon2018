@@ -1,66 +1,70 @@
+'use strict';
+
+var domain = 'https://2018zoohackathon.ajzane.com';
+var headers = {
+  method: 'get',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
+
 (function() {
-
-  var myImage = document.querySelector('img');
-
-  let posts = {};
-  let categories = {};
+  // A list of Category IDs that have been found on this page
+  let categories = [];
+  // The total number of words found on the page
   let countTotal = 0;
 
-  fetch('https://2018zoohackathon.ajzane.com/wp-json/wp/v2/categories?per_page=100', {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-  })
-  .then((response) => { return response.json() })
+  fetch(`${domain}/wp-json/wp/v2/categories?per_page=100`, headers)
+  .then((response) => response.json() )
   .then((jsonData) => {
-    
     var context = document.querySelector("body"); // expensive.
+    
+    console.log('counting matches...')
+    chrome.runtime.sendMessage(null, {
+      count: '...'
+    });
 
-    const categoryNames = jsonData.filter(category => category.name != "Uncategorized")
-    .map((item) => { return item.name; }).forEach((item) => {
+    jsonData.filter(category => category.name != "Uncategorized")
+      // .map(category => category)
+      .forEach((category) => {
         var options = {
-          "each": function (count) {
-            console.log('~each: ', count);
-          },
-          "end": function (count) {
-            console.log('~end: ', count);
-          },
           "done": function (count) {
-            console.log('~done: ', count);
+            // Update the total count of matches
             countTotal += count
           },
+          "each": function (node) {
+            // For each match: Add this category's ID to a list to find matching posts 
+            if (categories.indexOf(category.id) < 0) {
+              categories.push(category.id)
+            }
+          },
+          "caseSensitive": false,
           "ignoreJoiners": true,
-          "accuracy": "exactly",
           "separateWordSearch": false
         };
         var instance = new Mark(context);
-        instance.mark(item, options);
+        instance.mark(category.name, options);
       });
+      
+    console.log('total count: ' , countTotal)
 
-
-      chrome.runtime.sendMessage(null, {
-        count: countTotal,
-        posts: [42, 1337]
+    // Now that we have matching categories, find all of the Post IDs that belong to any of those categories
+    console.log('Matching categories: ' , categories)
+    fetch(`${domain}/wp-json/wp/v2/posts?categories=${categories}`, headers)
+      .then((response) => response.json() )
+      .then((posts) => {
+        console.log('posts: ' , posts)
+        // Update the popup
+        chrome.runtime.sendMessage(null, {
+          count: countTotal,
+          posts: posts.map(post => post.id)
+        });
+      })
+      .catch(err => {
+        console.log(err);
       });
-
-    return categories = jsonData;
   })
   .catch(err => {
     console.log(err);
   });
-
-  fetch('https://2018zoohackathon.ajzane.com/wp-json/wp/v2/posts/', {
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then((response) => { response.json() })
-  .then((jsonData) => { posts = jsonData; } )
-  .catch(err => {
-    console.log(err);
-  });
-
-
 })();
