@@ -10,7 +10,11 @@
  * @param {number} count The number to set in the badge
  */
 function setBadgeCount(count) {
-  console.log('setting to :' , count)
+  // Can only support 4 digits
+  if (count > 999) {
+    count = '999+'
+  }
+  console.log('setting badge count to:' , count)
   chrome.browserAction.setBadgeText({
     text: count.toString()
   });
