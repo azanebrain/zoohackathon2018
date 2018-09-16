@@ -17,7 +17,7 @@
     var context = document.querySelector("body"); // expensive.
 
     const categoryNames = jsonData.filter(category => category.name != "Uncategorized")
-    .map((item) => { return item.name; }).forEach((item) => { console.log(item);
+    .map((item) => { return item.name; }).forEach((item) => {
         var options = {
           end: function(count) {
             console.log(count);
