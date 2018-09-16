@@ -10,6 +10,7 @@
  * @param {number} count The number to set in the badge
  */
 function setBadgeCount(count) {
+  console.log('setting to :' , count)
   chrome.browserAction.setBadgeText({
     text: count.toString()
   });
@@ -19,6 +20,7 @@ function setBadgeCount(count) {
  * Clears the count from the badge
  */
 function clearBadgeCount() {
+  console.log('clearing')
   // set text to '' to remove the badge
   chrome.browserAction.setBadgeText({ text: '' });
 }
@@ -68,16 +70,19 @@ var cat = chrome.storage.local.get(['conconPosts'], async function(results) {
 chrome.runtime.onMessage.addListener((message) => {
   console.log('A message: ' , message)
   // Badge Message:
-  if (message.count) {
-    
-    setBadgeCount(message.count)
+  if (message.hasOwnProperty('count')) {
+    if(message.count < 1) {
+      clearBadgeCount()
+    } else {
+      setBadgeCount(message.count)
+    }
   }
-  if (message.color) {
+  if (message.hasOwnProperty('color')) {
     console.log('set a color')
   }
 
   // Post Message:
-  if (message.posts) {
+  if (message.hasOwnProperty('posts')) {
     console.log('the message has posts: ', message.posts)
     chrome.storage.sync.set({posts: message.posts});
   }
