@@ -69,6 +69,7 @@ chrome.runtime.onMessage.addListener((message) => {
   console.log('A message: ' , message)
   // Badge Message:
   if (message.count) {
+    
     setBadgeCount(message.count)
   }
   if (message.color) {
@@ -77,12 +78,8 @@ chrome.runtime.onMessage.addListener((message) => {
 
   // Post Message:
   if (message.posts) {
-    console.log('the message has posts')
-    chrome.storage.sync.set('posts', function (data) {
-      console.log('data: ', data)
-      // changeColor.style.backgroundColor = data.color;
-      // changeColor.setAttribute('value', data.color);
-    });
+    console.log('the message has posts: ', message.posts)
+    chrome.storage.sync.set({posts: message.posts});
   }
 })
 
