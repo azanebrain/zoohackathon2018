@@ -50,6 +50,13 @@ var headers = {
 
     // Now that we have matching categories, find all of the Post IDs that belong to any of those categories
     console.log('Matching categories: ' , categories)
+    // If there are no matches, no further work is needed
+    if (categories.length < 1) {
+      chrome.runtime.sendMessage(null, {
+        count: 0
+      });
+      return
+    }
     fetch(`${domain}/wp-json/wp/v2/posts?categories=${categories}`, headers)
       .then((response) => response.json() )
       .then((posts) => {
