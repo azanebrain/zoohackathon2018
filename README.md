@@ -14,9 +14,23 @@ Conscious Consumer has an initial focus on problematic ingredients in food, body
 * Enable Developer mode
 * "Load unpacked"
 
+# Architecture
+
+The extension is split into 3 main parts: Background, Popup, and DOM.
+
+You can think of Background as the controller of the extension which is always running and able to facilitate communication between the other two parts.
+
+The Popup is the view that is open when the user clicks the extension icon.
+
+The DOM is the current page, unrelated to the extension, but being used by it.
+
 # Debugging
 
-From the Extensions page, click the "inspect views background page"
+There are 3 levels of debugging:
+
+* Background: From the Extensions page, click the "inspect views background page"
+* Dom: Open the dev tools on the current page
+* Popup: Right click on the popup and select "Inspect"
 
 # Libraries
 * https://markjs.io/
