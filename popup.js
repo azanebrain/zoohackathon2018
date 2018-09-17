@@ -43,9 +43,9 @@ async function loadPosts() {
       })
         .then((response) => response.json())
         .then((media) => {
-          // consoleS.log('newpost.child: ' , newPost.childNodes)
-          // newPost.childNodes[1].childNodes[1].style.backgroundImage = `url('${domain}/${media.media_details.sizes.thumbnail.file}')`
-          newPost.childNodes[1].childNodes[1].style.backgroundImage = `url('${media.source_url}')`
+          console.log('Media: ' , media)
+          // Utilize the media hosted on Jetpack's servers
+          newPost.childNodes[1].childNodes[1].style.backgroundImage = `url('${media.media_details.sizes.thumbnail.source_url}')`
         })
         .catch(err => {
           console.log(err);
