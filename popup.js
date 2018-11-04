@@ -90,7 +90,10 @@ async function init() {
   chrome.storage.sync.get('posts', function(data) {
     console.log('data: ' , data)
     data.posts.forEach(postId => {
-      document.getElementById(`post-${postId}`).classList.remove('hidden')
+      var thisPost = document.getElementById(`post-${postId}`)
+      if (thisPost) {
+        thisPost.classList.remove('hidden')
+      }
     });
   });
 }
