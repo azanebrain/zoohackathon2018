@@ -1,0 +1,35 @@
+{
+  "name": "conscious-consumer",
+  "version": "1.0.0",
+  "description": "Conscious Consumer is an open source Chrome Browser extension that educates users about sensitive key-terms that relate to conservation issues, and serves as an indicator of product sustainability.",
+  "private": true,
+  "main": "background.js",
+  "scripts": {
+    "test": "rm -rf errorShots/ report/ log/ && wdio wdio.conf.local.js --suite=bvt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azanebrain/zoohackathon2018.git"
+  },
+  "keywords": [
+    "anti-poaching",
+    "yamakapi"
+  ],
+  "author": "AJ Zane, Brandon Lavigne",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/azanebrain/zoohackathon2018/issues"
+  },
+  "homepage": "https://github.com/azanebrain/zoohackathon2018#readme",
+  "devDependencies": {
+    "babel-register": "^6.26.0",
+    "browserevent": "^0.2.0",
+    "chromedriver": "^2.42.0",
+    "defaults-deep": "^0.2.4",
+    "wdio-mocha-framework": "^0.6.3",
+    "wdio-selenium-standalone-service": "0.0.10",
+    "webdrivercss": "^1.1.10",
+    "webdriverio": "^4.13.2",
+    "webdriverrtc": "^1.0.0"
+  }
+}
