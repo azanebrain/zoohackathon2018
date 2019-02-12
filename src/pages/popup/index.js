@@ -13,112 +13,87 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 300;
     width: 20rem;
     margin:0;
-    font-color: #666666;
+    color: #666666;
   }
 `;
 
 
-
-/*
-
-.link-more {display: none;}
-
-.post.active .accordion, .accordion:hover {
-    background-color: #e7e7e8;
-}
-
-.post.active .accordion:after {
-  content: "-";
-  font-size: 42px;
-}
-
-*/
-
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-
-/**
- * Initialize this view
- */
-async function init() {
-
-  var acc = document.getElementsByClassName("accordion");
-    var i;
-    
-    for (i = 0; i < acc.length; i++) {
-      acc[i].addEventListener("click", function() { console.log('foo');
-        this.classList.toggle("active");
-        var panel = this.nextElementSibling;
-        if (panel.style.maxHeight) {
-          panel.style.maxHeight = null;
-        } else {
-          panel.style.maxHeight = panel.scrollHeight + "px";
-        } 
-      });
+const fetchMedia = (media) => {
+  var domain = 'https://2018zoohackathon.ajzane.com';
+  return fetch(`${domain}/wp-json/wp/v2/media/${media}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json'
     }
+  })
+  .then((response) => response.json());
+};
 
-  
-}
+const getPosts = () => {
+  return new Promise(function(resolve, reject) {
+    chrome.storage.local.get(['conconPosts'], (items) => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        reject(chrome.runtime.lastError.message);
+      }else{
+        resolve(items['conconPosts']);
+      }
+    });
+  });
+};
+
+const getRelevantPosts = () => {
+  // Show the posts which should be shown
+  return new Promise(function(resolve, reject) {
+    chrome.storage.sync.get('posts', function(data) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        reject(chrome.runtime.lastError.message);
+      }else{
+        resolve(data.posts);
+      }
+    });
+  });
+};
 
 
-
-const mountNode = document.getElementById('app');
-
+const appActions = {
+  fetchMedia: fetchMedia,
+  getPosts: getPosts,
+  getRelevantPosts: getRelevantPosts,
+};
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.getPosts = this.getPosts.bind(this);
-    this.state = { posts: [] };
+    this.updateActivePanels = this.updateActivePanels.bind(this);
+    this.state = { posts: [], activePanels: {} };
   }
 
-  getPosts() {
-    return new Promise(function(resolve, reject) {
-      chrome.storage.local.get(['conconPosts'], (items) => {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError.message);
-          reject(chrome.runtime.lastError.message);
-        }else{
-          resolve(items['conconPosts']);
-        }
-      });
-    });
-  }
-
-  getRelevantPosts() {
-    // Show the posts which should be shown
-    return new Promise(function(resolve, reject) {
-      chrome.storage.sync.get('posts', function(data) {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError.message);
-          reject(chrome.runtime.lastError.message);
-        }else{
-          resolve(data.posts);
-        }
-      });
-    });
-  }
-
-  clickEvent(callback) {
-    console.log(callback);
+  updateActivePanels(id) {
+    // clone so we don't overwrite state directly
+    console.log(this);
+    let active = Object.create(this.state.activePanels);
+    active[id] = 1 - (active[id]|0);
+    this.setState({ activePanels: active });
   }
 
   componentDidMount() {
-    const relevantPosts = this.getRelevantPosts(); //.then((posts) => posts);
-    const getPosts = this.getPosts(); //.then((posts) => this.setState({ 'posts': posts }));
-    Promise.all([relevantPosts, getPosts]).then(values => {
+
+    const { getRelevantPosts, getPosts } = this.props.actions;
+
+    Promise.all([getRelevantPosts(), getPosts()]).then(values => {
       const [ relevantPosts, posts ] = values;
 
       const filteredPosts = posts.filter((post) => relevantPosts.includes(post.id));
-      this.setState({ 'posts': filteredPosts })
+      this.setState({ 'posts': filteredPosts });
     });
   }
 
   render() {
     const { posts } = this.state;
+    const { fetchMedia } = this.props.actions;
     return (
     <React.Fragment>
       <GlobalStyle />
@@ -143,9 +118,11 @@ class App extends React.Component {
               title={title}
               excerpt={excerpt}
               link={link}
-              clickEvent={this.clickEvent}
-              isActive={true}
+              updateActivePanels={this.updateActivePanels}
+              isActive={this.state.activePanels[id]||false}
               featuredMedia={featuredMedia}
+              fetchMedia={fetchMedia}
+
             />
           );
         })
@@ -157,6 +134,5 @@ class App extends React.Component {
 }
 
 
-ReactDOM.render(<App/>, mountNode);
-
-//init();
+const mountNode = document.getElementById('app');
+ReactDOM.render(<App actions={appActions}/>, mountNode);
