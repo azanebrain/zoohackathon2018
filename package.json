@@ -1,0 +1,42 @@
+{
+  "name": "zoohackathon2018",
+  "version": "1.1.2",
+  "private": true,
+  "description": "Conscious Consumer is an open source Chrome Browser extension that educates users about sensitive key-terms that relate to conservation issues, and serves as an indicator of product sustainability.",
+  "main": "background.js",
+  "dependencies": {
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "styled-components": "^4.1.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-styled-components": "^1.10.0",
+    "copy-webpack-plugin": "^4.6.0",
+    "eslint": "^5.13.0",
+    "eslint-plugin-import": "^2.16.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mark.js": "^8.11.1",
+    "mini-css-extract-plugin": "^0.5.0",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3"
+  },
+  "scripts": {
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azanebrain/zoohackathon2018.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/azanebrain/zoohackathon2018/issues"
+  },
+  "homepage": "https://github.com/azanebrain/zoohackathon2018#readme"
+}

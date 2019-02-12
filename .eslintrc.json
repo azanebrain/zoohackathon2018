@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+  ],
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true,
+    "webextensions": true
+  },
+  "rules": {
+    "no-console": 1,
+    "semi": 1,
+    "no-unused-vars": 0
+  }
+}
