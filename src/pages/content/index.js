@@ -1,5 +1,7 @@
 'use strict';
 
+import Mark from 'mark.js';
+
 var domain = 'https://2018zoohackathon.ajzane.com';
 var headers = {
   method: 'get',
