@@ -15,7 +15,7 @@ function generateHtmlPlugins(items) {
   ))
 }
 
-module.exports = {
+const config = {
   entry: {
     background: `${PAGES_PATH}/background`,
     content: `${PAGES_PATH}/content`,
@@ -23,6 +23,7 @@ module.exports = {
     popup: `${PAGES_PATH}/popup`,
     polyfills: `${PAGES_PATH}/polyfills`,
   },
+  devtool: 'cheap-module-source-map',
   externals: {
     "react": "React",
     "react-dom": "ReactDOM"
@@ -75,3 +76,8 @@ module.exports = {
     )
   ]
 };
+
+//if( process.argv.includes('development') ) {}
+
+
+module.exports = config;

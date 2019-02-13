@@ -39,5 +39,5 @@
     "128": "images/Logo-128px.png"
   },
   "manifest_version": 2,
-  "content_security_policy": "script-src 'self' https://unpkg.com; object-src 'self';"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://unpkg.com; object-src 'self';"
 }
