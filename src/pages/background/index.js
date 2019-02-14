@@ -1,6 +1,5 @@
 import store from './store';
-import { WPRemoteGet } from '../../actions/PostActions';
-
+import { WPRemoteGet, getPosts } from '../../actions/PostActions';
 console.log('store state', store.getState());
 
 /**
@@ -41,6 +40,7 @@ function setBadgeToMediumColor() {
 }
 
 const updateConConPosts = (data) => {
+  console.log(data);
   chrome.storage.local.set({conconPosts: data});
   return data;
 };
@@ -80,5 +80,18 @@ chrome.runtime.onMessage.addListener((message) => {
     console.log('the message has posts: ', message.posts)
     chrome.storage.sync.set({posts: message.posts});
   }
-})
+});
 
+if(store.getState().categories.length === 0) {
+  WPRemoteGet(`/categories?per_page=100`, (data) => {
+    data.map( (cat) => {
+      //console.log(cat);
+      const { id, link, name } = cat;
+      const filterCat = ({id, link, name}) => ({id, link, name});
+      store.dispatch({type: 'ADD_CATEGORY', id, name, link });
+      return filterCat(cat);
+    });
+    //const filteredCats = data.map( ({cat: {id, link, name}}) => ({id, link, name}) );
+    //console.log(filteredCats);
+  });
+}

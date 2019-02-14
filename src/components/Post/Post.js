@@ -8,29 +8,30 @@ import PostImage from './PostImage';
 import PostTitle from './PostTitle';
 import PostLearnMore from './PostLearnMore';
 
+import { togglePanel } from '../../pages/background/actions';
+
 class Post extends React.PureComponent {
 
   constructor(props) {
     super(props);
     this.clickCallback = this.clickCallback.bind(this);
-    this.state = { backgroundImage: null };
+    //this.state = { backgroundImage: null };
   }
 
   clickCallback() {
-    return this.props.updateActivePanels(this.props.id);
+    this.props.togglePanel(this.props.id);
   }
 
   componentDidMount() {
-    console.log('Post context', this);
-    console.log(this.props.featuredMedia);
-    
+    /*
     this.props.fetchMedia(this.props.featuredMedia).then((media) => {
       // Utilize the media hosted on Jetpack's servers
-      this.setState({backgroundImage: media.media_details.sizes.thumbnail.source_url })
+      this.setState({backgroundImage: media.media_details.sizes.thumbnail.source_url });
     })
     .catch(err => {
       console.log(err);
     });
+    */
     
   }
 
@@ -40,7 +41,7 @@ class Post extends React.PureComponent {
     return(
       <div id={this.props.id} onClick={this.clickCallback}>
         <Accordion isActive={isActive}>
-          <PostImage backgroundImage={this.state.backgroundImage} />
+          <PostImage backgroundImage={false} />
           <PostTitle dangerouslySetInnerHTML={{__html: title}}></PostTitle>
         </Accordion>
         <Panel isActive={isActive}>
@@ -57,7 +58,11 @@ class Post extends React.PureComponent {
 const mapStateToProps = (state) => ({
     count: state.count,
     posts: state.posts,
-    activePanels: state.activePanels
+    panels: state.panels
 });
 
-export default connect(mapStateToProps)(Post);
+const mapDispatchToProps = dispatch => ({
+  togglePanel: flag => dispatch(togglePanel(flag)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post);

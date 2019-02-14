@@ -27,7 +27,7 @@ const WPRemoteGet = (endpoint, callback) => {
   .catch(err => {
     console.log(err);
   });
-}
+};
 
 const getPosts = () => {
   return new Promise(function(resolve, reject) {

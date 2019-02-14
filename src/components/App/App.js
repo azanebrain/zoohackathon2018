@@ -2,11 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import uuid from 'uuid/v4';
 
-
 import styled, { createGlobalStyle } from 'styled-components';
 import Post from '../../components/Post/Post.js';
-import { togglePanel } from '../../pages/background/actions';
-
 
 const Container = styled.div`
 padding: 16px;
@@ -22,19 +19,11 @@ body {
 }
 `;
 
-
-
 class App extends React.Component {
 
 constructor(props) {
   super(props);
-  this.updateActivePanels = this.updateActivePanels.bind(this);
-  this.state = { posts: [], activePanels: {}, count: 0 }; // @todo remove state and move into redux store.
-}
-
-updateActivePanels(id) {
-  this.props.togglePanel(id);
-  console.log(this.props);
+  this.state = { posts: [], count: 0 }; // @todo remove state and move into redux store.
 }
 
 componentDidMount() {
@@ -49,6 +38,10 @@ componentDidMount() {
     const filteredPosts = posts.filter((post) => relevantPosts.includes(post.id));
     this.setState({ 'posts': filteredPosts });
   });
+}
+
+componentDidUpdate() {
+  console.log(this);
 }
 
 render() {
@@ -77,8 +70,7 @@ render() {
               title={title}
               excerpt={excerpt}
               link={link}
-              updateActivePanels={this.updateActivePanels}
-              isActive={this.state.activePanels[id]||false}
+              isActive={false}
               featuredMedia={featuredMedia}
               fetchMedia={fetchMedia}
 
@@ -94,13 +86,9 @@ render() {
 const mapStateToProps = (state) => {
   return {
     count: state.count,
-    posts: state.posts,
-    activePanels: state.activePanels
+    settings: state.settings,
+    panels: state.panels
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    togglePanel: (id) => dispatch(togglePanel(id))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);
