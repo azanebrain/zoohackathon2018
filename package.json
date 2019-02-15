@@ -5,9 +5,14 @@
   "description": "Conscious Consumer is an open source Chrome Browser extension that educates users about sensitive key-terms that relate to conservation issues, and serves as an indicator of product sustainability.",
   "main": "background.js",
   "dependencies": {
+    "lodash": "^4.17.11",
     "react": "^16.8.1",
+    "react-chrome-redux": "^2.0.0-alpha.4",
     "react-dom": "^16.8.1",
-    "styled-components": "^4.1.3"
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "styled-components": "^4.1.3",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -28,7 +33,7 @@
   },
   "scripts": {
     "dev": "webpack --mode development --watch",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production --watch"
   },
   "repository": {
     "type": "git",

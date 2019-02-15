@@ -15,7 +15,7 @@ function generateHtmlPlugins(items) {
   ))
 }
 
-module.exports = {
+const config = {
   entry: {
     background: `${PAGES_PATH}/background`,
     content: `${PAGES_PATH}/content`,
@@ -76,3 +76,8 @@ module.exports = {
     )
   ]
 };
+
+//if( process.argv.includes('development') ) {}
+
+
+module.exports = config;

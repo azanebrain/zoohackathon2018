@@ -1,8 +1,7 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+import store from './store';
+import { WPRemoteGet } from '../../actions/PostActions';
 
-'use strict';
+console.log('store state', store.getState());
 
 /**
  * Adds a number to the badge
@@ -41,24 +40,15 @@ function setBadgeToMediumColor() {
   chrome.browserAction.setBadgeBackgroundColor({ color: [0, 0, 255, 128] });
 }
 
-var cat = chrome.storage.local.get(['conconPosts'], async function(results) {
+const updateConConPosts = (data) => {
+  chrome.storage.local.set({conconPosts: data});
+  return data;
+};
+
+chrome.storage.local.get(['conconPosts'], async function(results) {
 
   if(Object.keys(results).length === 0) {
-
-    var results = await fetch('https://2018zoohackathon.ajzane.com/wp-json/wp/v2/posts/', {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then((response) => { return response.json() })
-    .then((jsonData) => {
-      chrome.storage.local.set({conconPosts: jsonData});
-      return jsonData;
-    })
-    .catch(err => {
-      console.log(err);
-    });
+    WPRemoteGet('/posts/', updateConConPosts(data));
   }
   return results;
 });

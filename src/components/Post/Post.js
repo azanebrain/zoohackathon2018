@@ -1,5 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Store } from "react-chrome-redux";
+import { connect } from 'react-redux';
 
 import Accordion from '../Accordion/Accordion';
 import { Panel, PanelContainer } from '../Accordion/Panel';
@@ -7,8 +8,7 @@ import PostImage from './PostImage';
 import PostTitle from './PostTitle';
 import PostLearnMore from './PostLearnMore';
 
-
-export default class Post extends React.PureComponent {
+class Post extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -21,6 +21,9 @@ export default class Post extends React.PureComponent {
   }
 
   componentDidMount() {
+    console.log('Post context', this);
+    console.log(this.props.featuredMedia);
+    
     this.props.fetchMedia(this.props.featuredMedia).then((media) => {
       // Utilize the media hosted on Jetpack's servers
       this.setState({backgroundImage: media.media_details.sizes.thumbnail.source_url })
@@ -28,13 +31,14 @@ export default class Post extends React.PureComponent {
     .catch(err => {
       console.log(err);
     });
+    
   }
 
   render() {
-    const { title, excerpt, link, isActive, updateActivePanels } = this.props;
+    const { title, excerpt, link, isActive } = this.props;
 
     return(
-      <div onClick={this.clickCallback} isActive={isActive}>
+      <div id={this.props.id} onClick={this.clickCallback}>
         <Accordion isActive={isActive}>
           <PostImage backgroundImage={this.state.backgroundImage} />
           <PostTitle dangerouslySetInnerHTML={{__html: title}}></PostTitle>
@@ -49,3 +53,11 @@ export default class Post extends React.PureComponent {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+    count: state.count,
+    posts: state.posts,
+    activePanels: state.activePanels
+});
+
+export default connect(mapStateToProps)(Post);
