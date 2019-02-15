@@ -1,37 +1,32 @@
 import Mark from 'mark.js';
 import { WPRemoteGet } from '../../actions/PostActions';
+import { Store } from 'react-chrome-redux';
 
-// A list of Category IDs that have been found on this page
-let categories = [];
-// The total number of words found on the page
-let countTotal = 0;
+const store = new Store({
+  portName: 'CONCON',
+})
 
+store.dispatch({type: 'RESET_BADGE_TEXT'});
 
 // Update the popup
-const updateCountAndPosts = (posts) => {
+const updatePosts = (posts) => {
   chrome.runtime.sendMessage(null, {
-    count: countTotal,
     posts: posts.map(post => post.id)
   });
 };
 
-// Update the total count of matches
-const updateCount = (count) => {
-  countTotal += count;
-};
-
 // For each match: Add this category's ID to a list to find matching posts 
-const onMatch = (node, category) => {
-  if (categories.indexOf(category.id) < 0) {
-    categories.push(category.id);
-  }
+const onMatch = (category_id) => {
+  store.dispatch({type: 'CATEGORY_MATCH', id: category_id });
 };
 
 // run mark js on a specific "category" term
 const runMark = (category) => {
   var options = {
-    "done": (count) => updateCount(count),
-    "each": (node) => onMatch(node, category),
+    "done": (count) => {
+      store.dispatch({type: 'SET_BADGE_TEXT', text: count.toString()})
+    },
+    "each": () => onMatch(category.id),
     "caseSensitive": false,
     "ignoreJoiners": true,
     "separateWordSearch": false
@@ -40,29 +35,28 @@ const runMark = (category) => {
   instance.mark(category.name, options);
 };
 
+const findAllMatches = (categories) => {
 
-const findAllMatches = (jsonData) => {
-  console.log('counting matches...');
-  chrome.runtime.sendMessage(null, {
-    count: '...'
-  });
+  const { match } = store.getState();
 
-  jsonData.filter(category => category.name != "Uncategorized")
-    // .map(category => category)
-    .forEach((category) => runMark(category));
-    
-  console.log('total count: ' , countTotal);
-
-  // Now that we have matching categories, find all of the Post IDs that belong to any of those categories
-  console.log('Matching categories: ' , categories);
   // If there are no matches, no further work is needed
+  const length = categories.length;
   if (categories.length < 1) {
-    chrome.runtime.sendMessage(null, {
-      count: 0
-    });
+    store.dispatch({type: 'SET_BADGE_TEXT', length });
     return;
   }
-  WPRemoteGet(`/posts?categories=${categories}`, updateCountAndPosts);
+
+  const matchCategories = Object.keys(match);
+  
+  //WPRemoteGet(`/posts?categories=${matchCategories}`, updatePosts);
 };
 
-WPRemoteGet(`/categories?per_page=100`, findAllMatches);
+store.ready(() => {
+  const { categories } = store.getState();
+
+  categories
+    .filter(category => category.name != "Uncategorized")
+    .forEach((category) => runMark(category));
+
+  findAllMatches(categories);
+});

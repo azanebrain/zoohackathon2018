@@ -56,7 +56,7 @@ class Post extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    count: state.count,
+    badgeText: state.badgeText,
     posts: state.posts,
     panels: state.panels
 });

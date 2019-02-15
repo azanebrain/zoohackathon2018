@@ -1,6 +1,28 @@
 import store from './store';
 import { WPRemoteGet, getPosts } from '../../actions/PostActions';
+
+// @todo: now that we're caching, we should version check to flush the cache.
+
 console.log('store state', store.getState());
+
+const { badgeText: currentBadgeText, categories: currentCategories } = store.getState();
+
+/*
+
+Background is persistent. 
+Should be used for handling communication between: 
+  1 external services
+  2. content and popup scripts.
+
+On background load
+On initial load retrieve list of active categories and store in localstorage
+retrieve 10 posts and store in localstorage
+
+
+On content load
+Retrieve categories from localstorage and find matching keywords within page, store matching category ID's
+
+*/
 
 /**
  * Adds a number to the badge
@@ -17,6 +39,18 @@ function setBadgeCount(count) {
     text: count.toString()
   });
 }
+
+
+const handleBadgeText = () => {
+  let previousText = currentBadgeText;
+  const badgeText = store.getState().badgeText;
+
+  if (previousText !== badgeText) {
+    setBadgeCount(badgeText);
+  }
+}
+
+store.subscribe(handleBadgeText);
 
 /**
  * Clears the count from the badge
@@ -47,8 +81,10 @@ const updateConConPosts = (data) => {
 
 chrome.storage.local.get(['conconPosts'], async function(results) {
 
+  console.log('conconPosts', results);
+
   if(Object.keys(results).length === 0) {
-    WPRemoteGet('/posts/', updateConConPosts(data));
+    WPRemoteGet('/posts/', updateConConPosts);
   }
   return results;
 });
@@ -62,19 +98,6 @@ chrome.storage.local.get(['conconPosts'], async function(results) {
  * @param {Post Message} message Contains the Post IDs that should be 
  */
 chrome.runtime.onMessage.addListener((message) => {
-  console.log('A message: ' , message)
-  // Badge Message:
-  if (message.hasOwnProperty('count')) {
-    if(message.count < 1) {
-      clearBadgeCount()
-    } else {
-      setBadgeCount(message.count)
-    }
-  }
-  if (message.hasOwnProperty('color')) {
-    console.log('set a color')
-  }
-
   // Post Message:
   if (message.hasOwnProperty('posts')) {
     console.log('the message has posts: ', message.posts)
@@ -85,13 +108,10 @@ chrome.runtime.onMessage.addListener((message) => {
 if(store.getState().categories.length === 0) {
   WPRemoteGet(`/categories?per_page=100`, (data) => {
     data.map( (cat) => {
-      //console.log(cat);
       const { id, link, name } = cat;
       const filterCat = ({id, link, name}) => ({id, link, name});
       store.dispatch({type: 'ADD_CATEGORY', id, name, link });
       return filterCat(cat);
     });
-    //const filteredCats = data.map( ({cat: {id, link, name}}) => ({id, link, name}) );
-    //console.log(filteredCats);
   });
 }

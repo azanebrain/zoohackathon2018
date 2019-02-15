@@ -23,25 +23,24 @@ class App extends React.Component {
 
 constructor(props) {
   super(props);
-  this.state = { posts: [], count: 0 }; // @todo remove state and move into redux store.
+  this.state = { posts: [] }; // @todo remove state and move into redux store.
 }
 
 componentDidMount() {
-
-  console.log(this);
-
+  
   const { getRelevantPosts, getPosts } = this.props.actions;
 
   Promise.all([getRelevantPosts(), getPosts()]).then(values => {
     const [ relevantPosts, posts ] = values;
 
-    const filteredPosts = posts.filter((post) => relevantPosts.includes(post.id));
+    const filteredPosts = posts.filter((category) => relevantPosts.includes(category.id));
+    
     this.setState({ 'posts': filteredPosts });
   });
 }
 
 componentDidUpdate() {
-  console.log(this);
+  console.log('app.props.categories', this.props.categories);
 }
 
 render() {
@@ -51,7 +50,7 @@ render() {
   <React.Fragment>
     <GlobalStyle />
     <Container>
-      <h1>Conscious Consumer {this.props.count}</h1>
+      <h1>Conscious Consumer {this.props.badgeText}</h1>
     </Container>
 
     <div id="posts">
@@ -73,7 +72,6 @@ render() {
               isActive={false}
               featuredMedia={featuredMedia}
               fetchMedia={fetchMedia}
-
             />
           );
         })
@@ -85,9 +83,10 @@ render() {
 
 const mapStateToProps = (state) => {
   return {
-    count: state.count,
+    badgeText: state.badgeText,
     settings: state.settings,
-    panels: state.panels
+    panels: state.panels,
+    categories: state.categories
   };
 };
 

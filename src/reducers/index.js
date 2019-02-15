@@ -1,13 +1,15 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
+import badgeText from './badgeText';
 import categories from './categories';
-import count from './count';
 import panels from './panels';
+import match from './match';
 import posts from './posts';
 import settings from './settings';
 
 export default combineReducers ({
+  badgeText,
   categories,
-  count,
+  match,
   panels,
   posts,
   settings,

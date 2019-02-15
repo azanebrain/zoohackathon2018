@@ -11,7 +11,7 @@ const fetchMedia = (media) => {
   .then((response) => response.json());
 };
 
-const WPRemoteGet = (endpoint, callback) => {
+const WPRemoteGet = (endpoint, callback, ...args) => {
   var init = {
     method: 'get',
     headers: {
@@ -23,7 +23,7 @@ const WPRemoteGet = (endpoint, callback) => {
 
   fetch(`${apiBase}${endpoint}`, init)
   .then((response) => response.json() )
-  .then((data) => callback(data))
+  .then((data) => callback(data, ...args))
   .catch(err => {
     console.log(err);
   });

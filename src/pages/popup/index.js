@@ -11,12 +11,6 @@ const store = new Store({
   portName: 'CONCON'
 });
 
-console.log(store.getState().categories);
-
-store.dispatch({ type: 'ADD_COUNT'});
-
-store.subscribe(() => console.log('store', store.getState()));
-
 const appActions = {
   getPosts: getPosts,
   getRelevantPosts: getRelevantPosts,
