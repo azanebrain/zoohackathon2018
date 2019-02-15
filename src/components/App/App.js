@@ -1,11 +1,9 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import uuid from 'uuid/v4';
 
 
 import styled, { createGlobalStyle } from 'styled-components';
 import Post from '../../components/Post/Post.js';
-import { togglePanel } from '../../pages/background/actions';
 
 
 const Container = styled.div`
@@ -33,13 +31,14 @@ constructor(props) {
 }
 
 updateActivePanels(id) {
-  this.props.togglePanel(id);
-  console.log(this.props);
+  // clone so we don't overwrite state directly
+  console.log(this);
+  let active = Object.create(this.state.activePanels);
+  active[id] = 1 - (active[id]|0);
+  this.setState({ activePanels: active });
 }
 
 componentDidMount() {
-
-  console.log(this);
 
   const { getRelevantPosts, getPosts } = this.props.actions;
 
@@ -58,7 +57,7 @@ render() {
   <React.Fragment>
     <GlobalStyle />
     <Container>
-      <h1>Conscious Consumer {this.props.count}</h1>
+      <h1>Conscious Consumer</h1>
     </Container>
 
     <div id="posts">
@@ -91,16 +90,4 @@ render() {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    count: state.count,
-    posts: state.posts,
-    activePanels: state.activePanels
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-    togglePanel: (id) => dispatch(togglePanel(id))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

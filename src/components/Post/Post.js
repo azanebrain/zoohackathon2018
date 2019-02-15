@@ -1,6 +1,4 @@
 import React from 'react';
-import { Store } from "react-chrome-redux";
-import { connect } from 'react-redux';
 
 import Accordion from '../Accordion/Accordion';
 import { Panel, PanelContainer } from '../Accordion/Panel';
@@ -21,9 +19,6 @@ class Post extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log('Post context', this);
-    console.log(this.props.featuredMedia);
-    
     this.props.fetchMedia(this.props.featuredMedia).then((media) => {
       // Utilize the media hosted on Jetpack's servers
       this.setState({backgroundImage: media.media_details.sizes.thumbnail.source_url })
@@ -31,7 +26,6 @@ class Post extends React.PureComponent {
     .catch(err => {
       console.log(err);
     });
-    
   }
 
   render() {
@@ -54,10 +48,4 @@ class Post extends React.PureComponent {
   }
 }
 
-const mapStateToProps = (state) => ({
-    count: state.count,
-    posts: state.posts,
-    activePanels: state.activePanels
-});
-
-export default connect(mapStateToProps)(Post);
+export default Post;

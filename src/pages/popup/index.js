@@ -12,7 +12,7 @@ const store = new Store({
 });
 
 
-store.dispatch({ type: 'ADD_COUNT'});
+//store.dispatch({ type: 'ADD_COUNT'});
 
 
 const appActions = {

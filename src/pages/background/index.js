@@ -1,7 +1,4 @@
-import store from './store';
 import { WPRemoteGet } from '../../actions/PostActions';
-
-console.log('store state', store.getState());
 
 /**
  * Adds a number to the badge
@@ -48,7 +45,7 @@ const updateConConPosts = (data) => {
 chrome.storage.local.get(['conconPosts'], async function(results) {
 
   if(Object.keys(results).length === 0) {
-    WPRemoteGet('/posts/', updateConConPosts(data));
+    WPRemoteGet('/posts/', updateConConPosts);
   }
   return results;
 });
