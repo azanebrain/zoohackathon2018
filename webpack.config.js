@@ -23,6 +23,7 @@ module.exports = {
     popup: `${PAGES_PATH}/popup`,
     polyfills: `${PAGES_PATH}/polyfills`,
   },
+  devtool: 'cheap-module-source-map',
   externals: {
     "react": "React",
     "react-dom": "ReactDOM"
