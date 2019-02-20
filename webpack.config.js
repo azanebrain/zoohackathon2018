@@ -2,6 +2,7 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+let package = require('./package.json');
 
 const PAGES_PATH = './src/pages';
 
@@ -13,6 +14,18 @@ function generateHtmlPlugins(items) {
       template: './src/pages/template.html'
     }
   ))
+}
+
+function modifyManifest(buffer) {
+  // copy-webpack-plugin passes a buffer
+  var manifest = JSON.parse(buffer.toString());
+
+  // make any modifications you like, such as
+  manifest.version = package.version;
+
+  // pretty print to JSON with two spaces
+  manifest_JSON = JSON.stringify(manifest, null, 2);
+  return manifest_JSON;
 }
 
 const config = {
@@ -63,7 +76,14 @@ const config = {
         {
           from: 'src',
           to: path.resolve('dist'),
-          ignore: [ 'pages/**/*' ]
+          ignore: [ 'pages/**/*', 'manifest.json' ]
+        },
+        {
+          from: "./src/manifest.json",
+          to:   "./manifest.json",
+          transform (content) {
+            return modifyManifest(content);
+          }
         }
       ]
     ),
