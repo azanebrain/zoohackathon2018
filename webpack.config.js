@@ -80,7 +80,7 @@ const config = {
         },
         {
           from: "./src/manifest.json",
-          to:   "./manifest.json",
+          to: path.resolve('dist'),
           transform (content) {
             return modifyManifest(content);
           }
