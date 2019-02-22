@@ -53,7 +53,7 @@ const init = () => {
 // run mark js on a specific "category" term
 const runMark = (category) => {
   var options = {
-    "done": (count) => updateCount(count),
+    "done": (count) => { console.log('count', count); updateCount(count);},
     "each": () => onMatch(category.id),
     "caseSensitive": false,
     "ignoreJoiners": true,
@@ -63,8 +63,8 @@ const runMark = (category) => {
   instance.mark(category.name, options);
 };
 
-const updateCount = () => {
-  store.dispatch(increment());
+const updateCount = (count) => {
+  store.dispatch(increment(count));
 }
 
 // For each match: Add this category's ID to a list to find matching posts 

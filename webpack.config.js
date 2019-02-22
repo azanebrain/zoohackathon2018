@@ -2,6 +2,7 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 let package = require('./package.json');
 
 const PAGES_PATH = './src/pages';
@@ -76,7 +77,7 @@ const config = {
         {
           from: 'src',
           to: path.resolve('dist'),
-          ignore: [ 'pages/**/*', 'manifest.json' ]
+          ignore: [ 'actions', 'components', 'redux', 'reducers', 'utilities', 'pages/**/*', 'manifest.json' ]
         },
         {
           from: "./src/manifest.json",
@@ -97,7 +98,19 @@ const config = {
   ]
 };
 
-//if( process.argv.includes('development') ) {}
-
+if( !process.argv.includes('development') ) {
+  config.optimization = {
+    minimizer: [
+      new TerserPlugin({
+        sourceMap: true,
+        terserOptions: {
+          compress: {
+            drop_console: true,
+          },
+        },
+      }),
+    ],
+  };
+}
 
 module.exports = config;
