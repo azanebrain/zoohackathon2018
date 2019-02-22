@@ -1,10 +1,12 @@
 import React from 'react';
 import uuid from 'uuid/v4';
 
-
 import styled, { createGlobalStyle } from 'styled-components';
-import Post from '../../components/Post/Post.js';
+import Post from '../../components/Post/Post';
 
+import * as actionCreators from '../../redux/actions/actions';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 const Container = styled.div`
 padding: 16px;
@@ -18,69 +20,61 @@ body {
   margin:0;
   color: #666666;
 }
+sup { font-weight: 100; }
 `;
-
-
 
 class App extends React.Component {
 
-constructor(props) {
-  super(props);
-  this.updateActivePanels = this.updateActivePanels.bind(this);
-  this.state = { posts: [], activePanels: {}, count: 0 }; // @todo remove state and move into redux store.
-}
-
-updateActivePanels(id) {
-  // clone so we don't overwrite state directly
-  console.log(this);
-  let active = Object.create(this.state.activePanels);
-  active[id] = 1 - (active[id]|0);
-  this.setState({ activePanels: active });
-}
-
-componentDidMount() {
-
-  const { getRelevantPosts, getPosts } = this.props.actions;
-
-  Promise.all([getRelevantPosts(), getPosts()]).then(values => {
-    const [ relevantPosts, posts ] = values;
-
-    const filteredPosts = posts.filter((post) => relevantPosts.includes(post.id));
-    this.setState({ 'posts': filteredPosts });
-  });
-}
+  sizeImage(image, width=100, height=100) {
+    const url = new URL(image);
+    url.searchParams.set('fit',`${width},${height}`);
+    return url;
+  }
 
 render() {
-  const { posts } = this.state;
-  const { fetchMedia } = this.props.actions;
+  const {posts, categories, count, matches} = this.props;
+  
+  const matchIDs = Object.keys(matches).map((id) => parseInt(id));
+
+  const filter = Object.entries(posts).filter(([id, post]) => {
+    const {
+      categories: postCat,
+    } = post;
+
+    const intersection = matchIDs.filter(element => { return postCat.includes(element); });
+
+    return intersection.length;
+  });
+
   return (
   <React.Fragment>
     <GlobalStyle />
     <Container>
-      <h1>Conscious Consumer</h1>
+      <h1>Conscious Consumer <sup>{this.props.count}</sup></h1>
     </Container>
 
     <div id="posts">
       {
-        posts.map((post) => {
+        
+        filter.map(([id, post]) => {
           const {
-            excerpt: { rendered: excerpt },
-            title: {rendered: title},
+            excerpt,
+            title,
             link,
-            id,
-            featured_media: featuredMedia
+            categories,
+            jetpack_featured_media_url: jetpack_featured_media_url,
+            isActive,
           } = post;
+          const sizedImage = this.sizeImage(jetpack_featured_media_url);
           return (
             <Post 
               id={id}
               title={title}
               excerpt={excerpt}
               link={link}
-              updateActivePanels={this.updateActivePanels}
-              isActive={this.state.activePanels[id]||false}
-              featuredMedia={featuredMedia}
-              fetchMedia={fetchMedia}
-
+              updateActivePanels={this.props.togglePost}
+              isActive={isActive}
+              featuredMedia={sizedImage}
             />
           );
         })
@@ -90,4 +84,25 @@ render() {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    posts: state.posts,
+    categories: state.categories,
+    count: state.count,
+    matches: state.matches,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(actionCreators, dispatch);
+};
+
+App.defaultProps = {
+  posts: {},
+  categories: {},
+  count: 0,
+  matches: {}
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

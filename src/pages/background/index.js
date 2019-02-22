@@ -1,81 +1,90 @@
-import { WPRemoteGet } from '../../actions/PostActions';
+import store from './store';
+import { setBadgeCount, WPRemoteGet } from '../../utilities/utilities';
+import { addPost, addCategory, pageStatus } from '../../redux/actions/actions';
+import throttle from 'lodash/throttle';
 
-/**
- * Adds a number to the badge
- *
- * @param {number} count The number to set in the badge
- */
-function setBadgeCount(count) {
-  // Can only support 4 digits
-  if (count > 999) {
-    count = '999+'
+const shouldGetPosts = Object.keys(store.getState().posts).length === 0;
+const shouldGetCategories = Object.keys(store.getState().categories).length === 0;
+
+let previousCount = store.getState().count;
+let categoryMatches = store.getState().matches;
+let previousStatus = store.getState().page;
+
+store.subscribe(throttle(() => {
+  const { count, matches, page } = store.getState();
+  if( count !== previousCount ) {
+    setBadgeCount(count);
+    previousCount = count;
   }
-  console.log('setting badge count to:' , count)
-  chrome.browserAction.setBadgeText({
-    text: count.toString()
+
+  if( matches !== categoryMatches ) {
+    console.log('categoryMatches', matches);
+    categoryMatches = matches;
+  }
+
+  if( page !== previousStatus ) {
+    console.log('pageStatus', page);
+    previousStatus = page;
+  }
+
+  console.log(store.getState());
+}, 400));
+
+if( shouldGetPosts ) {
+  WPRemoteGet('/posts/', (posts) => {
+    posts.map( (post) => {
+      const {
+        categories,
+        content: {rendered:content},
+        date,
+        excerpt: {rendered: excerpt},
+        featured_media,
+        id,
+        jetpack_featured_media_url,
+        modified,
+        slug,
+        title: {rendered: title}
+    } = post;
+      store.dispatch(
+        addPost(
+          categories,
+          content,
+          date,
+          excerpt,
+          featured_media,
+          id,
+          jetpack_featured_media_url,
+          modified,
+          slug,
+          title
+        )
+      );
+    });
+    console.log('store state after add posts', store.getState());
   });
 }
+if( shouldGetCategories ) {
+  WPRemoteGet(`/categories?per_page=100`, (categories) => {
+    // ignore the 'Uncategorized' category.
+    const filtered = categories.filter(category => category.name != "Uncategorized");
 
-/**
- * Clears the count from the badge
- */
-function clearBadgeCount() {
-  console.log('clearing')
-  // set text to '' to remove the badge
-  chrome.browserAction.setBadgeText({ text: '' });
-}
-
-function setBadgeToBadColor() {
-  chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 128] });
-}
-
-function setBadgeToGoodColor() {
-  chrome.browserAction.setBadgeBackgroundColor({ color: [0, 255, 0, 128] });
-}
-
-function setBadgeToMediumColor() {
-  chrome.browserAction.setBadgeBackgroundColor({ color: [0, 0, 255, 128] });
-}
-
-const updateConConPosts = (data) => {
-  chrome.storage.local.set({conconPosts: data});
-  return data;
+    filtered.map( (category) => {
+      const { description, id, link, name, parent, slug } = category;
+      store.dispatch(
+        addCategory(
+          description,
+          id,
+          link,
+          name,
+          parent,
+          slug
+        )
+      );
+    });
+    console.log('store state after add category', store.getState());
+  });
 };
 
-chrome.storage.local.get(['conconPosts'], async function(results) {
-
-  if(Object.keys(results).length === 0) {
-    WPRemoteGet('/posts/', updateConConPosts);
-  }
-  return results;
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  store.dispatch(pageStatus(tab.active, tab.incognito, tab.status, tab.title, tab.url));
 });
-
-// look at localstorage see if posts exist, if not hit the endpoint and set to local storage.
-
-/**
- * Listen for messages from the DOM
- * 
- * @param {Badge Message} message Updates the icon badge. Contains a count, a color, or both
- * @param {Post Message} message Contains the Post IDs that should be 
- */
-chrome.runtime.onMessage.addListener((message) => {
-  console.log('A message: ' , message)
-  // Badge Message:
-  if (message.hasOwnProperty('count')) {
-    if(message.count < 1) {
-      clearBadgeCount()
-    } else {
-      setBadgeCount(message.count)
-    }
-  }
-  if (message.hasOwnProperty('color')) {
-    console.log('set a color')
-  }
-
-  // Post Message:
-  if (message.hasOwnProperty('posts')) {
-    console.log('the message has posts: ', message.posts)
-    chrome.storage.sync.set({posts: message.posts});
-  }
-})
-

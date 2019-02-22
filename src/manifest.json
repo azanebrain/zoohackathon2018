@@ -3,7 +3,6 @@
   "version": 0,
   "description": "Point of Sale Impact Education Tool for Online Consumers",
   "permissions": [
-    "<all_urls>",
     "activeTab",
     "cookies",
     "declarativeContent",

@@ -1,21 +1,24 @@
-import { createStore } from 'redux';
-import { wrapStore } from 'react-chrome-redux';
+import { applyMiddleware, createStore } from 'redux';
+import { alias, wrapStore } from 'react-chrome-redux';
 
-import reducer from '../../reducers';
-import throttle from 'lodash/throttle';
+import reducer from '../../redux/reducers';
 
-import { saveState, loadState } from '../../util/localStorage';
+import { saveState, loadState } from '../../utilities/localStorage';
 
-const store = createStore(
-  reducer,
+const store = createStore(reducer,
   loadState()
 );
 
-store.subscribe(throttle(() => {
+store.subscribe( () => {
   saveState({
+    categories: store.getState().categories,
+    count: store.getState().count,
+    matches: store.getState().matches,
+    panel: store.getState().panel,
+    posts: store.getState().posts,
     settings: store.getState().settings,
   });
-}), 1000);
+});
 
 wrapStore(store, {
   portName: 'CONCON',

@@ -1,37 +1,60 @@
 import Mark from 'mark.js';
-import { WPRemoteGet } from '../../actions/PostActions';
+import { contentMutations } from '../../utilities/utilities';
+import { increment, resetCount, resetMatches, categoryMatch } from '../../redux/actions/actions';
+import throttle from 'lodash/throttle';
 
-// A list of Category IDs that have been found on this page
-let categories = [];
-// The total number of words found on the page
-let countTotal = 0;
+import { Store } from 'react-chrome-redux';
+const store = new Store({
+  portName: 'CONCON'
+});
+
+console.log('CONTENT SCRIPT: RUNNING');
+
+/* lifecycle of the content script.
+1. Page loads,
+2. content script runs,
+3. dies on page change.
+*/
+
+let previousStatus = { status: 'not loaded' };
+
+store.ready( () => {
+
+  console.log('CONTENT SCRIPT: STORE READY');
+
+  previousStatus = store.getState().page.status;
+
+});
 
 
-// Update the popup
-const updateCountAndPosts = (posts) => {
-  chrome.runtime.sendMessage(null, {
-    count: countTotal,
-    posts: posts.map(post => post.id)
-  });
-};
+store.subscribe(throttle(() => {
+  const page = store.getState().page;
 
-// Update the total count of matches
-const updateCount = (count) => {
-  countTotal += count;
-};
-
-// For each match: Add this category's ID to a list to find matching posts 
-const onMatch = (node, category) => {
-  if (categories.indexOf(category.id) < 0) {
-    categories.push(category.id);
+  // run at the very end of the page load and whenever a page change event is fired
+  if( previousStatus !== 'complete' && page.status === 'complete' ) {
+    contentMutations(init);
+    console.log('pageStatus', page);
   }
-};
+
+  previousStatus = page.status;
+
+  console.log('store', store.getState());
+}, 400));
+
+const init = () => {
+  const categories = store.getState().categories;
+  store.dispatch(resetCount());
+  store.dispatch(resetMatches());
+  Object.entries(categories).map(([key, category]) => {
+    runMark(category);
+  });
+}
 
 // run mark js on a specific "category" term
 const runMark = (category) => {
   var options = {
     "done": (count) => updateCount(count),
-    "each": (node) => onMatch(node, category),
+    "each": () => onMatch(category.id),
     "caseSensitive": false,
     "ignoreJoiners": true,
     "separateWordSearch": false
@@ -40,29 +63,11 @@ const runMark = (category) => {
   instance.mark(category.name, options);
 };
 
+const updateCount = () => {
+  store.dispatch(increment());
+}
 
-const findAllMatches = (jsonData) => {
-  console.log('counting matches...');
-  chrome.runtime.sendMessage(null, {
-    count: '...'
-  });
-
-  jsonData.filter(category => category.name != "Uncategorized")
-    // .map(category => category)
-    .forEach((category) => runMark(category));
-    
-  console.log('total count: ' , countTotal);
-
-  // Now that we have matching categories, find all of the Post IDs that belong to any of those categories
-  console.log('Matching categories: ' , categories);
-  // If there are no matches, no further work is needed
-  if (categories.length < 1) {
-    chrome.runtime.sendMessage(null, {
-      count: 0
-    });
-    return;
-  }
-  WPRemoteGet(`/posts?categories=${categories}`, updateCountAndPosts);
+// For each match: Add this category's ID to a list to find matching posts 
+const onMatch = (category) => { console.log(category);
+  store.dispatch(categoryMatch(category));
 };
-
-WPRemoteGet(`/categories?per_page=100`, findAllMatches);
