@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import styled, { createGlobalStyle } from 'styled-components';
 import Post from '../Post/Post';
+import AppBar from '../AppBar/AppBar';
 
 import * as actionCreators from '../../redux/actions/actions';
 
@@ -55,6 +56,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <GlobalStyle />
+        <AppBar count={count} />
 
         <div id="posts">
           {
