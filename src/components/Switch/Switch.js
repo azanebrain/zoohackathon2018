@@ -52,12 +52,12 @@ class CustomizedSwitches extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      checkedB: true,
+      checkedB: false,
     };
   }
 
   handleChange = name => (event) => {
-    this.setState({ [name]: event.target.checked });
+    this.setState({ ...event.state, [name]: event.target.checked });
   };
 
   render() {
@@ -82,7 +82,7 @@ class CustomizedSwitches extends React.Component {
               value="checkedB"
             />
           )}
-          label="iOS style"
+          label="Disable"
         />
       </FormGroup>
     );
