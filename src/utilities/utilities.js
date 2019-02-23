@@ -1,21 +1,21 @@
 import APP from './constants';
 
 export function WPRemoteGet(endpoint, callback) {
-  var init = {
+  const init = {
     method: 'get',
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
-  
+
   const apiBase = `${APP.api.domain}${APP.api.basePath}`;
 
   fetch(`${apiBase}${endpoint}`, init)
-  .then((response) => response.json() )
-  .then((data) => callback(data))
-  .catch(err => {
-    console.log(err);
-  });
+    .then(response => response.json())
+    .then(data => callback(data))
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 /**
@@ -26,11 +26,11 @@ export function WPRemoteGet(endpoint, callback) {
 export function setBadgeCount(count) {
   // Can only support 4 digits
   if (count > 999) {
-    count = '999+'
+    count = '999+';
   }
 
   chrome.browserAction.setBadgeText({
-    text: count.toString()
+    text: count.toString(),
   });
 }
 
@@ -38,7 +38,7 @@ export function setBadgeCount(count) {
  * Clears the count from the badge
  */
 export function clearBadgeCount() {
-  console.log('clearing')
+  console.log('clearing');
   // set text to '' to remove the badge
   chrome.browserAction.setBadgeText({ text: '' });
 }
@@ -58,48 +58,49 @@ export function setBadgeToMediumColor() {
 // measure the time between mutations
 export function contentMutations(cb) {
   // Select the node that will be observed for mutations
-  var targetNode = document.body;
-  var targetTime = 1000; // 1 second
+  const targetNode = document.body;
+  const targetTime = 1000; // 1 second
   let timeOfMutation = Date.now();
-  let interval = setInterval(measureMutations, 400);
+
+  let interval;
+  let observer;
+
+  function disconnectObserver() {
+    // Later, you can stop observing
+    observer.disconnect();
+  }
 
   function measureMutations() {
-    let now = Date.now();
+    const now = Date.now();
     const timeOffset = now - timeOfMutation;
     console.log(now - timeOfMutation);
-    if( timeOffset > targetTime ) {
+    if (timeOffset > targetTime) {
       console.log('disconnecting');
       clearInterval(interval);
       disconnectObserver();
       cb();
     }
   }
-  // Options for the observer (which mutations to observe)
-  var config = { attributes: false, childList: true, subtree: true };
-
-  // Callback function to execute when mutations are observed
-  var callback = function(mutationsList, observer) {
-      for(var mutation of mutationsList) {
-          if (mutation.type == 'childList' || mutation.type == 'subtree') {
-              console.log('A child node has been added or removed.');
-              timeOfMutation = Date.now();
-              clearInterval(interval);
-              interval = setInterval(measureMutations, 400);
-          }
+  observer = new MutationObserver((mutationsList) => {
+    mutationsList.forEach((mutation) => {
+      if (mutation.type === 'childList' || mutation.type === 'subtree') {
+        console.log('A child node has been added or removed.');
+        timeOfMutation = Date.now();
+        clearInterval(interval);
+        interval = setInterval(measureMutations, 400);
       }
-  };
+    });
+  });
 
-  // Create an observer instance linked to the callback function
-  var observer = new MutationObserver(callback);
+  interval = setInterval(measureMutations, 400);
+
+  // Options for the observer (which mutations to observe)
+  const config = { attributes: false, childList: true, subtree: true };
 
   // Start observing the target node for configured mutations
   observer.observe(targetNode, config);
 
-  function disconnectObserver() {
-    // Later, you can stop observing
-    observer.disconnect();
-  }
   return {
-    disconnectObserver: disconnectObserver,
-  }
+    disconnectObserver,
+  };
 }

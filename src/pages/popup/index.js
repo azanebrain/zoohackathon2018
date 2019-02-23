@@ -12,12 +12,12 @@ import App from '../../components/App/App';
 */
 
 const store = new Store({
-  portName: 'CONCON'
+  portName: 'CONCON',
 });
 
 ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('app')
+  document.getElementById('app'),
 );

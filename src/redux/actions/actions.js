@@ -17,13 +17,13 @@ const RESET_MATCHES = 'RESET_MATCHES';
 
 const PAGE = 'PAGE';
 
-//action creators
-export const increment = (amount=1) => ({
+// action creators
+export const increment = (amount = 1) => ({
   type: INCREMENT,
   amount,
 });
 
-export const decrement = (amount=1) => ({
+export const decrement = (amount = 1) => ({
   type: DECREMENT,
   amount: -amount,
 });
@@ -45,7 +45,7 @@ export const removeComment = (index, postId) => ({
   postId,
 });
 
-export const categoryMatch = (id) => ({
+export const categoryMatch = id => ({
   type: CATEGORY_MATCH,
   id,
   isActive: false,
@@ -66,7 +66,7 @@ export const addCategory = (
   link,
   name,
   parent,
-  slug
+  slug,
 ) => ({
   type: ADD_CATEGORY,
   description,
@@ -76,8 +76,6 @@ export const addCategory = (
   parent,
   slug,
 });
-
-
 
 export const addPosts = (posts = []) => ({
   type: ADD_POSTS,
@@ -95,7 +93,7 @@ export const addPost = (
   modified,
   slug,
   title,
-  isActive=false
+  isActive = false,
 ) => ({
   type: ADD_POST,
   categories,

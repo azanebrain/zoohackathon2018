@@ -1,11 +1,16 @@
 import Mark from 'mark.js';
-import { contentMutations } from '../../utilities/utilities';
-import { increment, resetCount, resetMatches, categoryMatch } from '../../redux/actions/actions';
 import throttle from 'lodash/throttle';
-
 import { Store } from 'react-chrome-redux';
+import { contentMutations } from '../../utilities/utilities';
+import {
+  increment,
+  resetCount,
+  resetMatches,
+  categoryMatch,
+} from '../../redux/actions/actions';
+
 const store = new Store({
-  portName: 'CONCON'
+  portName: 'CONCON',
 });
 
 console.log('CONTENT SCRIPT: RUNNING');
@@ -18,20 +23,47 @@ console.log('CONTENT SCRIPT: RUNNING');
 
 let previousStatus = { status: 'not loaded' };
 
-store.ready( () => {
-
+store.ready(() => {
   console.log('CONTENT SCRIPT: STORE READY');
 
   previousStatus = store.getState().page.status;
-
 });
 
+// For each match: Add this category's ID to a list to find matching posts
+const onMatch = (category) => {
+  console.log(category);
+  store.dispatch(categoryMatch(category));
+};
+
+const updateCount = (count) => {
+  store.dispatch(increment(count));
+}
+
+// run mark js on a specific "category" term
+const runMark = (category) => {
+  const options = {
+    done: count => updateCount(count),
+    each: () => onMatch(category.id),
+    caseSensitive: false,
+    ignoreJoiners: true,
+    separateWordSearch: false,
+  };
+  const instance = new Mark(document.body);
+  instance.mark(category.name, options);
+};
+
+const init = () => {
+  const { categories } = store.getState();
+  store.dispatch(resetCount());
+  store.dispatch(resetMatches());
+  Object.entries(categories).map(([key, category]) => runMark(category));
+}
 
 store.subscribe(throttle(() => {
-  const page = store.getState().page;
+  const { page } = store.getState();
 
   // run at the very end of the page load and whenever a page change event is fired
-  if( previousStatus !== 'complete' && page.status === 'complete' ) {
+  if (previousStatus !== 'complete' && page.status === 'complete') {
     contentMutations(init);
     console.log('pageStatus', page);
   }
@@ -40,34 +72,3 @@ store.subscribe(throttle(() => {
 
   console.log('store', store.getState());
 }, 400));
-
-const init = () => {
-  const categories = store.getState().categories;
-  store.dispatch(resetCount());
-  store.dispatch(resetMatches());
-  Object.entries(categories).map(([key, category]) => {
-    runMark(category);
-  });
-}
-
-// run mark js on a specific "category" term
-const runMark = (category) => {
-  var options = {
-    "done": (count) => { console.log('count', count); updateCount(count);},
-    "each": () => onMatch(category.id),
-    "caseSensitive": false,
-    "ignoreJoiners": true,
-    "separateWordSearch": false
-  };
-  var instance = new Mark(document.body);
-  instance.mark(category.name, options);
-};
-
-const updateCount = (count) => {
-  store.dispatch(increment(count));
-}
-
-// For each match: Add this category's ID to a list to find matching posts 
-const onMatch = (category) => { console.log(category);
-  store.dispatch(categoryMatch(category));
-};

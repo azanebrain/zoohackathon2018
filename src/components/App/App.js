@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import uuid from 'uuid/v4';
-
-import styled, { createGlobalStyle } from 'styled-components';
-import Post from '../../components/Post/Post';
-
-import * as actionCreators from '../../redux/actions/actions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
+import styled, { createGlobalStyle } from 'styled-components';
+import Post from '../Post/Post';
+
+import * as actionCreators from '../../redux/actions/actions';
 
 const Container = styled.div`
 padding: 16px;
@@ -23,85 +24,91 @@ body {
 sup { font-weight: 100; }
 `;
 
+const sizeImage = (image, width = 100, height = 100) => {
+  const url = new URL(image);
+  url.searchParams.set('fit', `${width},${height}`);
+  return url;
+};
+
 class App extends React.Component {
-
-  sizeImage(image, width=100, height=100) {
-    const url = new URL(image);
-    url.searchParams.set('fit',`${width},${height}`);
-    return url;
-  }
-
-render() {
-  const {posts, categories, count, matches} = this.props;
-  
-  const matchIDs = Object.keys(matches).map((id) => parseInt(id));
-
-  const filter = Object.entries(posts).filter(([id, post]) => {
+  render() {
     const {
-      categories: postCat,
-    } = post;
+      posts,
+      categories,
+      count,
+      matches,
+      togglePost,
+    } = this.props;
 
-    const intersection = matchIDs.filter(element => { return postCat.includes(element); });
+    const matchIDs = Object.keys(matches).map(id => parseInt(id));
 
-    return intersection.length;
-  });
+    const filter = Object.entries(posts).filter(([id, post]) => {
+      const {
+        categories: postCat,
+      } = post;
 
-  return (
-  <React.Fragment>
-    <GlobalStyle />
-    <Container>
-      <h1>Conscious Consumer <sup>{this.props.count}</sup></h1>
-    </Container>
+      const intersection = matchIDs.filter(element => postCat.includes(element));
 
-    <div id="posts">
-      {
-        
-        filter.map(([id, post]) => {
-          const {
-            excerpt,
-            title,
-            link,
-            categories,
-            jetpack_featured_media_url: jetpack_featured_media_url,
-            isActive,
-          } = post;
-          const sizedImage = this.sizeImage(jetpack_featured_media_url);
-          return (
-            <Post 
-              id={id}
-              title={title}
-              excerpt={excerpt}
-              link={link}
-              updateActivePanels={this.props.togglePost}
-              isActive={isActive}
-              featuredMedia={sizedImage}
-            />
-          );
-        })
-      }
-    </div>
-  </React.Fragment>);
+      return intersection.length;
+    });
+
+    return (
+      <React.Fragment>
+        <GlobalStyle />
+
+        <div id="posts">
+          {
+          filter.map(([id, post]) => {
+            const {
+              excerpt,
+              title,
+              link,
+              jetpack_featured_media_url,
+              isActive,
+            } = post;
+            const sizedImage = sizeImage(jetpack_featured_media_url);
+            return (
+              <Post
+                id={id}
+                title={title}
+                excerpt={excerpt}
+                link={link}
+                updateActivePanels={togglePost}
+                isActive={isActive}
+                featuredMedia={sizedImage}
+              />
+            );
+          })
+        }
+        </div>
+      </React.Fragment>
+    );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    posts: state.posts,
-    categories: state.categories,
-    count: state.count,
-    matches: state.matches,
-  };
-};
+const mapStateToProps = state => ({
+  posts: state.posts,
+  categories: state.categories,
+  count: state.count,
+  matches: state.matches,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(actionCreators, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(actionCreators, dispatch);
+
+App.propTypes = {
+  posts: PropTypes.object,
+  categories: PropTypes.object,
+  count: PropTypes.number,
+  matches: PropTypes.object,
+  togglePost: PropTypes.bool,
 };
 
 App.defaultProps = {
   posts: {},
   categories: {},
   count: 0,
-  matches: {}
+  matches: {},
+  togglePost: false,
 };
 
 

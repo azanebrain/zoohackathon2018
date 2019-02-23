@@ -9,11 +9,11 @@ import posts from './posts';
 import settings from './settings';
 
 
-export default combineReducers ({
+export default combineReducers({
   categories,
   count,
   matches,
   page,
   posts,
-  settings,  
+  settings,
 });

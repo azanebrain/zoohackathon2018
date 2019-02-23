@@ -12,7 +12,7 @@ const matches = (state = initialState, action) => {
     case 'RESET_MATCHES':
       return initialState;
     default:
-      return state; 
+      return state;
   }
 };
 

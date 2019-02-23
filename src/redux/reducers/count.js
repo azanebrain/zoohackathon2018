@@ -10,7 +10,7 @@ const count = (state = initialState, action) => {
     case 'RESET_COUNT':
       return initialState;
     default:
-      return state; 
+      return state;
   }
 };
 

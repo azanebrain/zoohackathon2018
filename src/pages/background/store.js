@@ -5,11 +5,9 @@ import reducer from '../../redux/reducers';
 
 import { saveState, loadState } from '../../utilities/localStorage';
 
-const store = createStore(reducer,
-  loadState()
-);
+const store = createStore(reducer, loadState());
 
-store.subscribe( () => {
+store.subscribe(() => {
   saveState({
     categories: store.getState().categories,
     count: store.getState().count,

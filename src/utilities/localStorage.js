@@ -18,5 +18,4 @@ export const saveState = (state) => {
   } catch (err) {
     /* log error */
   }
-
 };

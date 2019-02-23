@@ -4,9 +4,9 @@ const defaultState = {
   status: 'loading',
   title: '',
   url: '',
-}
+};
 
-const page = (state=defaultState,action) => {
+const page = (state = defaultState, action) => {
   switch (action.type) {
     case 'PAGE':
       return {
@@ -16,10 +16,10 @@ const page = (state=defaultState,action) => {
         status: action.status,
         title: action.title,
         url: action.url,
-      }
+      };
     default:
       return state;
   }
-}
+};
 
 export default page;
