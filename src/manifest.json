@@ -17,7 +17,7 @@
       "js": [
         "pages/content.js"
       ],
-      "matches": ["<all_urls>"],
+      "matches": ["*://*.amazon.com/*", "*://*.ebay.com/*"],
       "run_at" :"document_end"
     }
   ],

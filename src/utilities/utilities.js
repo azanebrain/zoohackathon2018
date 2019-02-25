@@ -23,10 +23,13 @@ export function WPRemoteGet(endpoint, callback) {
  *
  * @param {number} count The number to set in the badge
  */
-export function setBadgeCount(count) {
+export function setBadgeCount(storeCount) {
+  let count = storeCount;
   // Can only support 4 digits
   if (count > 999) {
     count = '999+';
+  } else if (count === 0) {
+    count = '...';
   }
 
   chrome.browserAction.setBadgeText({

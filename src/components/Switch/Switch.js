@@ -49,20 +49,16 @@ const styles = theme => ({
 });
 
 class CustomizedSwitches extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checkedB: false,
-    };
-  }
 
   handleChange = name => (event) => {
+    const { toggleButton } = this.props;
+    this.dispatch(toggleButton(event.target.checked));
     this.setState({ ...event.state, [name]: event.target.checked });
   };
 
   render() {
-    const { classes } = this.props;
-    const { checkedB } = this.state;
+    const { classes, button } = this.props;
+    // const { checkedB } = this.state;
 
     return (
       <FormGroup row>
@@ -77,7 +73,7 @@ class CustomizedSwitches extends React.Component {
                 checked: classes.iOSChecked,
               }}
               disableRipple
-              checked={checkedB}
+              checked={button}
               onChange={this.handleChange('checkedB')}
               value="checkedB"
             />

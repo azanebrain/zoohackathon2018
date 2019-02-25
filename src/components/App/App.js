@@ -32,12 +32,20 @@ const sizeImage = (image, width = 100, height = 100) => {
 };
 
 class App extends React.Component {
+  callbackHandler = (type, data) => {
+    switch (type) {
+      // will come to back to this later on
+    }
+  };
+
   render() {
     const {
       posts,
       categories,
       count,
       matches,
+      settings,
+      toggleButton,
       togglePost,
     } = this.props;
 
@@ -56,7 +64,12 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <GlobalStyle />
-        <AppBar count={count} />
+        <AppBar
+          callbackHandler={this.callbackHandler}
+          settings={settings}
+          toggleButton={toggleButton}
+          count={count}
+        />
 
         <div id="posts">
           {
@@ -89,10 +102,11 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  posts: state.posts,
   categories: state.categories,
   count: state.count,
   matches: state.matches,
+  posts: state.posts,
+  settings: state.settings,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(actionCreators, dispatch);
@@ -102,6 +116,8 @@ App.propTypes = {
   categories: PropTypes.object,
   count: PropTypes.number,
   matches: PropTypes.object,
+  settings: PropTypes.object,
+  toggleButton: PropTypes.bool,
   togglePost: PropTypes.bool,
 };
 
@@ -110,6 +126,8 @@ App.defaultProps = {
   categories: {},
   count: 0,
   matches: {},
+  settings: {},
+  toggleButton: false,
   togglePost: false,
 };
 
