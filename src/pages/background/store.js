@@ -1,11 +1,15 @@
 import { applyMiddleware, createStore } from 'redux';
 import { alias, wrapStore } from 'react-chrome-redux';
+import logger from 'redux-logger';
 
 import reducer from '../../redux/reducers';
-
 import { saveState, loadState } from '../../utilities/localStorage';
 
-const store = createStore(reducer, loadState());
+const store = createStore(
+  reducer,
+  loadState(),
+//  applyMiddleware(logger), // watch redux actions from the console.
+);
 
 store.subscribe(() => {
   saveState({
