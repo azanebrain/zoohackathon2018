@@ -8,21 +8,21 @@ const settings = (state = defaultState, action) => {
   switch (action.type) {
     case 'TOGGLE-BUTTON':
       return {
-        state,
+        ...state,
         button: action.toggleButton,
       };
     case 'TOGGLE-BUTTON-HISTORY':
       return {
-        state,
+        ...state,
         buttonHistory: action.toggleButtonHistory,
       };
     case 'UPDATE-DATE':
       return {
-        state,
+        ...state,
         expireDate: action.expireDate,
       };
     default:
-      return state;
+      return defaultState;
   }
 };
 

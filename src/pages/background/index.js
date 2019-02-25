@@ -16,7 +16,7 @@ let categoryMatches = store.getState().matches;
 let previousStatus = store.getState().page;
 
 store.subscribe(throttle(() => {
-  const { count, matches, page } = store.getState();
+  const { count: { count }, matches, page } = store.getState();
   if (count !== previousCount) {
     setBadgeCount(count);
     previousCount = count;
@@ -43,7 +43,6 @@ if (shouldGetPosts) {
         content: { rendered: content },
         date,
         excerpt: { rendered: excerpt },
-        featured_media,
         id,
         jetpack_featured_media_url,
         modified,
@@ -56,7 +55,6 @@ if (shouldGetPosts) {
           content,
           date,
           excerpt,
-          featured_media,
           id,
           jetpack_featured_media_url,
           modified,

@@ -1,12 +1,15 @@
-const initialState = 0;
+const initialState = { count: 0 };
 
 const count = (state = initialState, action) => {
-  const newCount = action.amount;
   switch (action.type) {
     case 'INCREMENT':
-      return state + action.amount;
+      return {
+        count: state.count + action.amount,
+      };
     case 'DECREMENT':
-      return state - (action.payload || 1);
+      return {
+        count: state.count - action.amount,
+      };
     case 'RESET_COUNT':
       return initialState;
     default:

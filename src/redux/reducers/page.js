@@ -10,7 +10,7 @@ const page = (state = defaultState, action) => {
   switch (action.type) {
     case 'PAGE':
       return {
-        state,
+        ...state,
         active: action.active,
         incognito: action.incognito,
         status: action.status,

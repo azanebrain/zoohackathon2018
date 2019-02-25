@@ -1,14 +1,11 @@
 const initialState = {};
 
 const matches = (state = initialState, action) => {
-  const obj = Object.assign({}, state);
   switch (action.type) {
     case 'CATEGORY_MATCH':
-      obj[action.id] = { isActive: false };
-      return obj;
+      return { ...state, [action.id]: { isActive: false } };
     case 'CATEGORY_MATCH_ACTIVE':
-      obj[action.id].isActive = !state[action.id].isActive;
-      return obj;
+      return { ...state, [action.id]: { isActive: !state[action.id].isActive } };
     case 'RESET_MATCHES':
       return initialState;
     default:

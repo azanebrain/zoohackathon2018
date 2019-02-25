@@ -78,10 +78,10 @@ class App extends React.Component {
               excerpt,
               title,
               link,
-              jetpack_featured_media_url,
+              featuredMediaUrl,
               isActive,
             } = post;
-            const sizedImage = sizeImage(jetpack_featured_media_url);
+            const sizedImage = sizeImage(featuredMediaUrl);
             return (
               <Post
                 id={id}
