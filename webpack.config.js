@@ -3,6 +3,8 @@ const CopyPlugin = require('copy-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const pjson = require('./package.json');
 
 const PAGES_PATH = './src/pages';
@@ -65,6 +67,7 @@ const config = {
     ],
   },
   plugins: [
+    new BundleAnalyzerPlugin({ analyzerPort: 8777 }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
