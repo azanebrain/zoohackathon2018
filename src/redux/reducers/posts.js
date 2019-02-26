@@ -1,5 +1,4 @@
 const posts = (state = {}, action) => {
-  const obj = Object.assign({}, state);
   switch (action.type) {
     case 'ADD_POSTS':
       return [
@@ -7,22 +6,28 @@ const posts = (state = {}, action) => {
         action.posts,
       ];
     case 'ADD_POST':
-      obj[action.id] = {
-        categories: action.categories,
-        content: action.content,
-        excerpt: action.excerpt,
-        featured_media: action.featured_media,
-        jetpack_featured_media_url: action.jetpack_featured_media_url,
-        link: action.link,
-        modified: action.modified,
-        slug: action.slug,
-        title: action.title,
-        isActive: false,
+      return {
+        ...state,
+        [action.id]: {
+          categories: action.categories,
+          content: action.content,
+          excerpt: action.excerpt,
+          featuredMediaUrl: action.jetpack_featured_media_url,
+          link: action.link,
+          modified: action.modified,
+          slug: action.slug,
+          title: action.title,
+          isActive: false,
+        },
       };
-      return obj;
     case 'TOGGLE_POST':
-      obj[action.postId].isActive = !obj[action.postId].isActive;
-      return obj;
+      return {
+        ...state,
+        [action.postId]: {
+          ...state[action.postId],
+          isActive: !state[action.postId].isActive,
+        },
+      };
     default:
       return state;
   }
