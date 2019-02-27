@@ -5,14 +5,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import Switch from '../Switch/Switch';
 
@@ -64,13 +59,17 @@ const styles = theme => ({
 
 class PrimarySearchAppBar extends React.Component {
   render() {
-    const { classes, count, settings, toggleButton } = this.props;
+    const {
+      classes,
+      count: { count },
+      settings,
+    } = this.props;
 
     return (
       <div className={classes.root}>
         <AppBar position="static" color="default">
           <Toolbar>
-            <Switch button={settings.button} toggleButton={toggleButton} />
+            <Switch button={settings.button} />
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               Material-UI
             </Typography>

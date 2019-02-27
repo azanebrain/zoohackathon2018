@@ -45,7 +45,6 @@ class App extends React.Component {
       count,
       matches,
       settings,
-      toggleButton,
       togglePost,
     } = this.props;
 
@@ -67,7 +66,6 @@ class App extends React.Component {
         <AppBar
           callbackHandler={this.callbackHandler}
           settings={settings}
-          toggleButton={toggleButton}
           count={count}
         />
 
@@ -117,7 +115,6 @@ App.propTypes = {
   count: PropTypes.number,
   matches: PropTypes.object,
   settings: PropTypes.object,
-  toggleButton: PropTypes.bool,
   togglePost: PropTypes.bool,
 };
 
@@ -127,7 +124,6 @@ App.defaultProps = {
   count: 0,
   matches: {},
   settings: {},
-  toggleButton: false,
   togglePost: false,
 };
 
