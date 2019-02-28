@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import uuid from 'uuid/v4';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { sizeImage } from '../../utilities/utilities';
 
 import styled, { createGlobalStyle } from 'styled-components';
 import Post from '../Post/Post';
@@ -23,12 +24,6 @@ body {
 }
 sup { font-weight: 100; }
 `;
-
-const sizeImage = (image, width = 100, height = 100) => {
-  const url = new URL(image);
-  url.searchParams.set('fit', `${width},${height}`);
-  return url;
-};
 
 class App extends React.Component {
   render() {

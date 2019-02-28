@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Active Accordion renders with background color 1`] = `
+.c0 {
+  background-color: #e7e7e8;
+  font-family: 'Raleway',sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  position: relative;
+}
+
+.c0::after {
+  font-family: 'Lato',sans-serif;
+  font-weight: 300;
+  content: '+';
+  font-size: '42px';
+  color: #777;
+  float: right;
+  margin-left: 5px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  position: absolute;
+  right: 24px;
+}
+
+.c0::hover {
+  background-color: #e7e7e8;
+}
+
+<button
+  className="c0"
+/>
+`;
+
+exports[`Inactive Accordion renders with background color 1`] = `
+.c0 {
+  background-color: #fff;
+  font-family: 'Raleway',sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  position: relative;
+}
+
+.c0::after {
+  font-family: 'Lato',sans-serif;
+  font-weight: 300;
+  content: '-';
+  font-size: '27px';
+  color: #777;
+  float: right;
+  margin-left: 5px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  position: absolute;
+  right: 24px;
+}
+
+.c0::hover {
+  background-color: #e7e7e8;
+}
+
+<button
+  className="c0"
+/>
+`;

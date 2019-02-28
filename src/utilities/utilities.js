@@ -23,7 +23,7 @@ export function WPRemoteGet(endpoint, callback) {
  *
  * @param {number} count The number to set in the badge
  */
-export function setBadgeCount(count) {
+export function setBadgeCount(count = 0) {
   // Can only support 4 digits
   if (count > 999) {
     count = '999+';
@@ -38,7 +38,6 @@ export function setBadgeCount(count) {
  * Clears the count from the badge
  */
 export function clearBadgeCount() {
-  console.log('clearing');
   // set text to '' to remove the badge
   chrome.browserAction.setBadgeText({ text: '' });
 }
@@ -56,10 +55,8 @@ export function setBadgeToMediumColor() {
 }
 
 // measure the time between mutations
-export function contentMutations(cb) {
+export function contentMutations(cb, targetTime=1000, targetNode = document.body) {
   // Select the node that will be observed for mutations
-  const targetNode = document.body;
-  const targetTime = 1000; // 1 second
   let timeOfMutation = Date.now();
 
   let interval;
@@ -73,9 +70,7 @@ export function contentMutations(cb) {
   function measureMutations() {
     const now = Date.now();
     const timeOffset = now - timeOfMutation;
-    console.log(now - timeOfMutation);
-    if (timeOffset > targetTime) {
-      console.log('disconnecting');
+    if (timeOffset >= targetTime) {
       clearInterval(interval);
       disconnectObserver();
       cb();
@@ -83,6 +78,7 @@ export function contentMutations(cb) {
   }
   observer = new MutationObserver((mutationsList) => {
     mutationsList.forEach((mutation) => {
+      console.log(mutation.type);
       if (mutation.type === 'childList' || mutation.type === 'subtree') {
         console.log('A child node has been added or removed.');
         timeOfMutation = Date.now();
@@ -104,3 +100,9 @@ export function contentMutations(cb) {
     disconnectObserver,
   };
 }
+
+export const sizeImage = (image, width = 100, height = 100) => {
+  const url = new URL(image);
+  url.searchParams.set('fit', `${width},${height}`);
+  return url.toString();
+};
