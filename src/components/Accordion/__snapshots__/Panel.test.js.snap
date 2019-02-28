@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Active Panel renders 500px tall 1`] = `
+.c0 {
+  background-color: white;
+  display: block;
+  max-height: 500px;
+  overflow: hidden;
+  padding: 0;
+  -webkit-transition: max-height 0.25s linear;
+  transition: max-height 0.25s linear;
+}
+
+.c0 .link-more {
+  display: none;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`Inactive Panel renders 0px tall 1`] = `
+.c0 {
+  background-color: white;
+  display: block;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  -webkit-transition: max-height 0.25s linear;
+  transition: max-height 0.25s linear;
+}
+
+.c0 .link-more {
+  display: none;
+}
+
+<div
+  className="c0"
+/>
+`;
