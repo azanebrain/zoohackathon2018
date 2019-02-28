@@ -13,7 +13,7 @@ export function WPRemoteGet(endpoint, callback) {
   fetch(`${apiBase}${endpoint}`, init)
     .then(response => response.json())
     .then(data => callback(data))
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
     });
 }
@@ -55,7 +55,7 @@ export function setBadgeToMediumColor() {
 }
 
 // measure the time between mutations
-export function contentMutations(cb, targetTime=1000, targetNode = document.body) {
+export function contentMutations(cb, targetTime = 1000, targetNode = document.body) {
   // Select the node that will be observed for mutations
   let timeOfMutation = Date.now();
 
@@ -76,8 +76,8 @@ export function contentMutations(cb, targetTime=1000, targetNode = document.body
       cb();
     }
   }
-  observer = new MutationObserver((mutationsList) => {
-    mutationsList.forEach((mutation) => {
+  observer = new MutationObserver(mutationsList => {
+    mutationsList.forEach(mutation => {
       console.log(mutation.type);
       if (mutation.type === 'childList' || mutation.type === 'subtree') {
         console.log('A child node has been added or removed.');

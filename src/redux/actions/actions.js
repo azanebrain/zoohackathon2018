@@ -38,14 +38,7 @@ export const resetMatches = () => ({
   type: RESET_MATCHES,
 });
 
-export const addCategory = (
-  description,
-  id,
-  link,
-  name,
-  parent,
-  slug,
-) => ({
+export const addCategory = (description, id, link, name, parent, slug) => ({
   type: ADD_CATEGORY,
   description,
   id,

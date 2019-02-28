@@ -17,5 +17,4 @@ const count = (state = initialState, action) => {
   }
 };
 
-
 export default count;

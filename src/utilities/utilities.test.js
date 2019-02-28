@@ -10,8 +10,11 @@ import {
 
 describe('sizeImage by modifying the jetpack url', () => {
   it('should return a modified url width and height of 100', () => {
-    const featuredMediaUrl = "https://i0.wp.com/2018zoohackathon.ajzane.com/wp-content/uploads/2018/09/animal-ape-calm-52530.jpg?fit=2560%2C1693&ssl=1";
-    expect(sizeImage(featuredMediaUrl, 100, 100)).toBe("https://i0.wp.com/2018zoohackathon.ajzane.com/wp-content/uploads/2018/09/animal-ape-calm-52530.jpg?fit=100%2C100&ssl=1")
+    const featuredMediaUrl =
+      'https://i0.wp.com/2018zoohackathon.ajzane.com/wp-content/uploads/2018/09/animal-ape-calm-52530.jpg?fit=2560%2C1693&ssl=1';
+    expect(sizeImage(featuredMediaUrl, 100, 100)).toBe(
+      'https://i0.wp.com/2018zoohackathon.ajzane.com/wp-content/uploads/2018/09/animal-ape-calm-52530.jpg?fit=100%2C100&ssl=1',
+    );
   });
 });
 
@@ -28,7 +31,6 @@ describe('setBadgeCount', () => {
   });
 });
 
-
 describe('clearBadgeCount', () => {
   it('should set badge text to empty string', () => {
     clearBadgeCount();
@@ -39,24 +41,29 @@ describe('clearBadgeCount', () => {
 describe('setBadgeToBadColor', () => {
   it('should set badge color to red', () => {
     setBadgeToBadColor();
-    expect(chrome.browserAction.setBadgeBackgroundColor).toHaveBeenCalledWith({ color: [255, 0, 0, 128] });
+    expect(chrome.browserAction.setBadgeBackgroundColor).toHaveBeenCalledWith({
+      color: [255, 0, 0, 128],
+    });
   });
 });
 
 describe('setBadgeToGoodColor', () => {
   it('should set badge color to green', () => {
     setBadgeToGoodColor();
-    expect(chrome.browserAction.setBadgeBackgroundColor).toHaveBeenCalledWith({ color: [0, 255, 0, 128] });
+    expect(chrome.browserAction.setBadgeBackgroundColor).toHaveBeenCalledWith({
+      color: [0, 255, 0, 128],
+    });
   });
 });
 
 describe('setBadgeToMediumColor', () => {
   it('should set badge color to blue', () => {
     setBadgeToMediumColor();
-    expect(chrome.browserAction.setBadgeBackgroundColor).toHaveBeenCalledWith({ color: [0, 0, 255, 128] });
+    expect(chrome.browserAction.setBadgeBackgroundColor).toHaveBeenCalledWith({
+      color: [0, 0, 255, 128],
+    });
   });
 });
-
 
 jest.useFakeTimers();
 
@@ -65,21 +72,17 @@ describe('contentMutations', () => {
   document.body.innerHTML = '<h1>Title</h1>';
 
   it('should trigger callback after 50ms of idle dom', () => {
-
     const callback = jest.fn();
 
     contentMutations(callback, 50);
 
     expect(callback).not.toBeCalled();
 
-  // Fast-forward until all timers have been executed
+    // Fast-forward until all timers have been executed
     jest.runAllTimers();
 
     // Now our callback should have been called!
     expect(callback).toBeCalled();
     expect(callback).toHaveBeenCalledTimes(1);
-    
   });
 });
-
-

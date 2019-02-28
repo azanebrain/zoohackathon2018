@@ -8,7 +8,7 @@ import { saveState, loadState } from '../../utilities/localStorage';
 const store = createStore(
   reducer,
   loadState(),
-//  applyMiddleware(logger), // watch redux actions from the console.
+  //  applyMiddleware(logger), // watch redux actions from the console.
 );
 
 store.subscribe(() => {
