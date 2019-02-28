@@ -34,7 +34,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { posts, categories, count, matches, settings, toggleButton, togglePost } = this.props;
+    const { posts, categories, count, matches, settings, togglePost } = this.props;
 
     const matchIDs = Object.keys(matches).map(id => parseInt(id));
 
@@ -49,12 +49,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <GlobalStyle />
-        <AppBar
-          callbackHandler={this.callbackHandler}
-          settings={settings}
-          toggleButton={toggleButton}
-          count={count}
-        />
+        <AppBar callbackHandler={this.callbackHandler} settings={settings} count={count} />
 
         <div id="posts">
           {filter.map(([id, post]) => {
@@ -94,7 +89,6 @@ App.propTypes = {
   count: PropTypes.number,
   matches: PropTypes.object,
   settings: PropTypes.object,
-  toggleButton: PropTypes.bool,
   togglePost: PropTypes.bool,
 };
 
@@ -104,7 +98,6 @@ App.defaultProps = {
   count: 0,
   matches: {},
   settings: {},
-  toggleButton: false,
   togglePost: false,
 };
 

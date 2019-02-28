@@ -5,6 +5,10 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { toggleButton as toggleButtonCreator } from '../../redux/actions/actions';
+
 const styles = theme => ({
   colorBar: {},
   colorChecked: {},
@@ -49,15 +53,15 @@ const styles = theme => ({
 });
 
 class CustomizedSwitches extends React.Component {
-
   handleChange = name => (event) => {
-    const { toggleButton } = this.props;
-    this.dispatch(toggleButton(event.target.checked));
-    this.setState({ ...event.state, [name]: event.target.checked });
+    const { toggleButtonCreator } = this.props;
+    toggleButtonCreator(event.target.checked);
+    // this.setState({ ...event.state, [name]: event.target.checked });
   };
 
   render() {
-    const { classes, button } = this.props;
+    const { classes, settings } = this.props;
+    console.log(this.props);
     // const { checkedB } = this.state;
 
     return (
@@ -73,7 +77,7 @@ class CustomizedSwitches extends React.Component {
                 checked: classes.iOSChecked,
               }}
               disableRipple
-              checked={button}
+              checked={settings.button}
               onChange={this.handleChange('checkedB')}
               value="checkedB"
             />
@@ -87,6 +91,19 @@ class CustomizedSwitches extends React.Component {
 
 CustomizedSwitches.propTypes = {
   classes: PropTypes.object.isRequired,
+  checked: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(CustomizedSwitches);
+CustomizedSwitches.defaultProps = {
+  checked: false,
+  settings: {},
+};
+
+
+const mapStateToProps = state => ({
+  settings: state.settings,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({ toggleButtonCreator }, dispatch);
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(CustomizedSwitches));
