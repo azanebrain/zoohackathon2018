@@ -13,5 +13,4 @@ const matches = (state = initialState, action) => {
   }
 };
 
-
 export default matches;

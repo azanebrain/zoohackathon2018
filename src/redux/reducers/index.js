@@ -8,7 +8,6 @@ import page from './page';
 import posts from './posts';
 import settings from './settings';
 
-
 export default combineReducers({
   categories,
   count,

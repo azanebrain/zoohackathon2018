@@ -1,19 +1,15 @@
 // actions
-const INCREMENT = 'INCREMENT';
-const DECREMENT = 'DECREMENT';
-const RESET_COUNT = 'RESET_COUNT';
-const ADD_COMMENT = 'ADD_COMMENT';
-const REMOVE_COMMENT = 'REMOVE_COMMENT';
+export const INCREMENT = 'INCREMENT';
+export const DECREMENT = 'DECREMENT';
+export const RESET_COUNT = 'RESET_COUNT';
 
-const ADD_POST = 'ADD_POST';
-const ADD_POSTS = 'ADD_POSTS';
-const TOGGLE_POST = 'TOGGLE_POST';
+export const ADD_POST = 'ADD_POST';
+export const TOGGLE_POST = 'TOGGLE_POST';
 
-const ADD_CATEGORY = 'ADD_CATEGORY';
-const ADD_CATEGORIES = 'ADD_CATEGORIES';
+export const ADD_CATEGORY = 'ADD_CATEGORY';
 
-const CATEGORY_MATCH = 'CATEGORY_MATCH';
-const RESET_MATCHES = 'RESET_MATCHES';
+export const CATEGORY_MATCH = 'CATEGORY_MATCH';
+export const RESET_MATCHES = 'RESET_MATCHES';
 
 const TOGGLE_BUTTON = 'TOGGLE_BUTTON';
 
@@ -34,19 +30,6 @@ export const resetCount = () => ({
   type: RESET_COUNT,
 });
 
-export const addComment = (author, comment, postId) => ({
-  type: ADD_COMMENT,
-  postId,
-  author,
-  comment,
-});
-
-export const removeComment = (index, postId) => ({
-  type: REMOVE_COMMENT,
-  index,
-  postId,
-});
-
 export const categoryMatch = id => ({
   type: CATEGORY_MATCH,
   id,
@@ -57,19 +40,7 @@ export const resetMatches = () => ({
   type: RESET_MATCHES,
 });
 
-export const addCategories = (categories = []) => ({
-  type: ADD_CATEGORIES,
-  categories,
-});
-
-export const addCategory = (
-  description,
-  id,
-  link,
-  name,
-  parent,
-  slug,
-) => ({
+export const addCategory = (description, id, link, name, parent, slug) => ({
   type: ADD_CATEGORY,
   description,
   id,
@@ -77,11 +48,6 @@ export const addCategory = (
   name,
   parent,
   slug,
-});
-
-export const addPosts = (posts = []) => ({
-  type: ADD_POSTS,
-  posts,
 });
 
 export const addPost = (
