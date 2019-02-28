@@ -43,15 +43,15 @@ export function clearBadgeCount() {
 }
 
 export function setBadgeToBadColor() {
-  chrome.browserAction.setBadgeBackgroundColor({ color: [255, 0, 0, 128] });
+  chrome.browserAction.setBadgeBackgroundColor({ color: [238, 30, 64, 255] });
 }
 
 export function setBadgeToGoodColor() {
-  chrome.browserAction.setBadgeBackgroundColor({ color: [0, 255, 0, 128] });
+  chrome.browserAction.setBadgeBackgroundColor({ color: [171, 213, 115, 255] });
 }
 
 export function setBadgeToMediumColor() {
-  chrome.browserAction.setBadgeBackgroundColor({ color: [0, 0, 255, 128] });
+  chrome.browserAction.setBadgeBackgroundColor({ color: [254, 232, 0, 255] });
 }
 
 // measure the time between mutations

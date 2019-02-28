@@ -1,7 +1,14 @@
 import throttle from 'lodash/throttle';
 
 import store from './store';
-import { setBadgeCount, WPRemoteGet } from '../../utilities/utilities';
+import {
+  clearBadgeCount,
+  setBadgeCount,
+  WPRemoteGet,
+  setBadgeToBadColor,
+  setBadgeToGoodColor,
+  setBadgeToMediumColor,
+} from '../../utilities/utilities';
 import { addPost, addCategory, pageStatus } from '../../redux/actions/actions';
 
 const shouldGetPosts = Object.keys(store.getState().posts).length === 0;
@@ -18,8 +25,21 @@ store.subscribe(
       matches,
       page,
     } = store.getState();
+
     if (count !== previousCount) {
-      setBadgeCount(count);
+      setBadgeToGoodColor();
+      if (count === 0) {
+        clearBadgeCount();
+      } else {
+        setBadgeCount(count);
+        if (count > 10 && count < 20) {
+          setBadgeToMediumColor();
+        } else if (count <= 10) {
+          setBadgeToGoodColor();
+        } else {
+          setBadgeToBadColor();
+        }
+      }
       previousCount = count;
     }
 

@@ -42,7 +42,7 @@ describe('setBadgeToBadColor', () => {
   it('should set badge color to red', () => {
     setBadgeToBadColor();
     expect(chrome.browserAction.setBadgeBackgroundColor).toHaveBeenCalledWith({
-      color: [255, 0, 0, 128],
+      color: [238, 30, 64, 255],
     });
   });
 });
@@ -51,7 +51,7 @@ describe('setBadgeToGoodColor', () => {
   it('should set badge color to green', () => {
     setBadgeToGoodColor();
     expect(chrome.browserAction.setBadgeBackgroundColor).toHaveBeenCalledWith({
-      color: [0, 255, 0, 128],
+      color: [171, 213, 115, 255],
     });
   });
 });
@@ -60,7 +60,7 @@ describe('setBadgeToMediumColor', () => {
   it('should set badge color to blue', () => {
     setBadgeToMediumColor();
     expect(chrome.browserAction.setBadgeBackgroundColor).toHaveBeenCalledWith({
-      color: [0, 0, 255, 128],
+      color: [254, 232, 0, 255],
     });
   });
 });
