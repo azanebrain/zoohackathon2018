@@ -4,7 +4,8 @@
     "eslint:recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "airbnb"
+    "airbnb",
+    "prettier"
   ],
   "parser": "babel-eslint",
   "parserOptions": {
@@ -15,6 +16,7 @@
       "modules": true
     }
   },
+  "plugins": ["prettier", "react-hooks"],
   "env": {
     "browser": true,
     "node": true,
@@ -25,6 +27,9 @@
     "no-console": 1,
     "semi": 1,
     "no-unused-vars": 0,
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "prettier/prettier": ["error"],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }
