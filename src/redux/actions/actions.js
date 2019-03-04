@@ -11,6 +11,8 @@ export const ADD_CATEGORY = 'ADD_CATEGORY';
 export const CATEGORY_MATCH = 'CATEGORY_MATCH';
 export const RESET_MATCHES = 'RESET_MATCHES';
 
+const TOGGLE_BUTTON = 'TOGGLE_BUTTON';
+
 const PAGE = 'PAGE';
 
 // action creators
@@ -85,4 +87,9 @@ export const pageStatus = (active, incognito, status, title, url) => ({
   status,
   title,
   url,
+});
+
+export const toggleButton = button => ({
+  type: TOGGLE_BUTTON,
+  button,
 });

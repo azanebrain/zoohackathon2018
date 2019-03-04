@@ -7,6 +7,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { sizeImage } from '../../utilities/utilities';
 
 import Post from '../Post/Post';
+import AppBar from '../AppBar/AppBar';
 
 import * as actionCreators from '../../redux/actions/actions';
 
@@ -26,8 +27,14 @@ sup { font-weight: 100; }
 `;
 
 class App extends React.Component {
+  // will come to back to this later on
+  callbackHandler = (type, data) => {
+    switch (type) {
+    }
+  };
+
   render() {
-    const { posts, categories, count, matches, togglePost } = this.props;
+    const { posts, categories, count, matches, settings, togglePost } = this.props;
 
     const matchIDs = Object.keys(matches).map(id => parseInt(id));
 
@@ -42,6 +49,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <GlobalStyle />
+        <AppBar callbackHandler={this.callbackHandler} settings={settings} count={count} />
 
         <div id="posts">
           {filter.map(([id, post]) => {
@@ -66,10 +74,11 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  posts: state.posts,
   categories: state.categories,
   count: state.count,
   matches: state.matches,
+  posts: state.posts,
+  settings: state.settings,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(actionCreators, dispatch);
@@ -79,6 +88,7 @@ App.propTypes = {
   categories: PropTypes.object,
   count: PropTypes.number,
   matches: PropTypes.object,
+  settings: PropTypes.object,
   togglePost: PropTypes.bool,
 };
 
@@ -87,6 +97,7 @@ App.defaultProps = {
   categories: {},
   count: 0,
   matches: {},
+  settings: {},
   togglePost: false,
 };
 

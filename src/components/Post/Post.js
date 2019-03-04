@@ -19,12 +19,12 @@ class Post extends React.PureComponent {
   }
 
   render() {
-    const { title, excerpt, link, isActive } = this.props;
+    const { excerpt, featuredMedia, id, isActive, link, title } = this.props;
 
     return (
-      <div id={this.props.id} onClick={this.clickCallback}>
+      <div id={id} onClick={this.clickCallback}>
         <Accordion isActive={isActive}>
-          <PostImage backgroundImage={this.props.featuredMedia} />
+          <PostImage backgroundImage={featuredMedia} />
           <PostTitle dangerouslySetInnerHTML={{ __html: title }} />
         </Accordion>
         <Panel isActive={isActive}>

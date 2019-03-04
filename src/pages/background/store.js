@@ -14,7 +14,7 @@ const store = createStore(
 store.subscribe(() => {
   saveState({
     categories: store.getState().categories,
-    count: store.getState().count,
+    // count: store.getState().count,
     matches: store.getState().matches,
     panel: store.getState().panel,
     posts: store.getState().posts,
